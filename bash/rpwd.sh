@@ -39,25 +39,25 @@ function rpwd () {
 
     local p1=$(rpwd1 | grep -v -E "^$" | head -n 1); echo $p1
     [[ $(type -t fmtex-hide-yopass-message) == function ]] && fmtex-hide-yopass-message "$p1"
-    aves "$p1"
+    [[ $(type -t aves) == function ]] && aves "$p1"
     echo -e "\n\n"
     # fhide-note-message "$p1"
 
     local p2=$(rpwd2 | grep -v -E "^$" | head -n 1); echo $p2
     [[ $(type -t fmtex-hide-yopass-message) == function ]] && fmtex-hide-yopass-message "$p2"
-    aves "$p2"
+    [[ $(type -t aves) == function ]] && aves "$p2"
     echo -e "\n\n"
     # fhide-note-message "$p2"
 
     local p3=$(rpwd3 | grep -v -E "^$" | head -n 1); echo $p3
     [[ $(type -t fmtex-hide-yopass-message) == function ]] && fmtex-hide-yopass-message "$p3"
-    aves "$p3"
+    [[ $(type -t aves) == function ]] && aves "$p3"
     echo -e "\n\n"
     # fhide-note-message "$p3"
 
     local p4=$(rpwd4 | grep -v -E "^$" | head -n 1); echo $p4
     [[ $(type -t fmtex-hide-yopass-message) == function ]] && fmtex-hide-yopass-message "$p4"
-    aves "$p4"
+    [[ $(type -t aves) == function ]] && aves "$p4"
     echo -e "\n\n"
     # fhide-note-message "$p4"
 }
