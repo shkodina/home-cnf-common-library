@@ -249,3 +249,42 @@ function fgit () {
 }
 
 alias fgg=fgit
+
+ ######   ######## ##    ##       ##     ## ######## ########  
+##    ##  ##       ###   ##       ##     ## ##       ##     ## 
+##        ##       ####  ##       ##     ## ##       ##     ## 
+##   #### ######   ## ## ##       ##     ## ######   ########  
+##    ##  ##       ##  ####        ##   ##  ##       ##   ##   
+##    ##  ##       ##   ###         ## ##   ##       ##    ##  
+ ######   ######## ##    ##          ###    ######## ##     ## 
+
+function f_lib_generate_version () {
+    # если откудато уже пришла версия то сохраним ее
+    local PREDEFINED_VERSION=$VERSION
+
+    git describe --tags --always --abbrev=8
+
+    test $(git describe --tags --always --abbrev=8 | sed -E 's/^v//g' | sed -E 's/^\.//g' | grep -c '\.') -gt 0 \
+            && VERSION=$(git describe --tags --always --abbrev=8 | sed -E 's/^v//g' | sed -E 's/^\.//g' | tr '()' '.' | sed -E "s/\.+$//" ) \
+            || VERSION=0.0.1-$(git log | grep -c commit)-$(git describe --tags --always --abbrev=8 | tr '()' '.' | sed -E "s/\.+$//")
+
+    test $VERSION_PREFIX && VERSION=$VERSION_PREFIX-$VERSION
+    test $VERSION_SUFFIX && VERSION=$VERSION-${VERSION_SUFFIX//:/-}
+
+    echo "$CI_BUILD_REF_NAME" | grep -q debug && VERSION=$VERSION-debug || true
+
+    # тут если версия из артефатов или первого объеявления не пуста и не совпала
+    test "$PREDEFINED_VERSION" != "" && \
+        test "$PREDEFINED_VERSION" != "$VERSION" && \
+            а_log_info "PREDEFINED_VERSION: $PREDEFINED_VERSION  DIFF FROM VERSION: $VERSION" && \
+                export VERSION=$PREDEFINED_VERSION
+
+    # тут если версия юзерская и не совпала, то сделаем мегакостылем ее главной
+    test "$USER_DEFINED_VERSION" != "" ] && \
+        test "$USER_DEFINED_VERSION" != "$VERSION" && \
+            а_log_info "USER_DEFINED_VERSION: $USER_DEFINED_VERSION  DIFF FROM VERSION: $VERSION" && \
+                export VERSION=$USER_DEFINED_VERSION
+
+    export VERSION=$VERSION
+    # echo VERSION="${VERSION}" > $CI_PROJECT_DIR/variables.env
+}
