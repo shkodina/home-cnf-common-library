@@ -41,3 +41,20 @@ function fvault-cli-get-secret-from-root () {  #  $1 path  $2 key(field)
     }
 }
 
+
+
+function fvault-cli-get-value-from-root () {  #  $1 path  $2 key(field)
+    # echo $1 $2
+    echo $2 | grep -q -E ".*/$" && {
+        # раз заканчивается на слеш, то это не ключ, а дерево и потому копаем дальше
+        fvault-cli-get-value-from-root $1$2 $(vault kv list -format=json $1$2 | jq -r .[] | fzf)
+    } || {
+        # раз в конце нет слеша, то это конечный ключ и его и надо вывести
+        # >&2 echo "TIPS: vault kv get $1$2"
+        local f=$(vault kv get  -format=json $1$2 | jq '.data.data' | jq -r 'keys[]' | fzf)
+        
+        >&2 echo "CMD: vault kv get -field=$f $1$2"
+        vault kv get -field=$f $1$2
+    }
+}
+
