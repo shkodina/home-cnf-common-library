@@ -43,6 +43,10 @@ alias reinit='source ~/.bashrc'
 
 alias rmlinks='find . -maxdepth 1 -type l | xargs rm'
 
+alias off='sudo poweroff'
+alias poweroff='sudo poweroff '
+alias reboot='sudo reboot '
+
 ##     ##    ###    ######## ##     ## 
 ###   ###   ## ##      ##    ##     ## 
 #### ####  ##   ##     ##    ##     ## 
