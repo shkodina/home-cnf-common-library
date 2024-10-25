@@ -57,4 +57,16 @@ alias reboot='sudo reboot '
 
 alias summ='paste -sd+ | bc'
 
+##    ## ########  ######## ##      ## 
+##   ##  ##     ## ##       ##  ##  ## 
+##  ##   ##     ## ##       ##  ##  ## 
+#####    ########  ######   ##  ##  ## 
+##  ##   ##   ##   ##       ##  ##  ## 
+##   ##  ##    ##  ##       ##  ##  ## 
+##    ## ##     ## ########  ###  ### 
 
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+alias kube-capacity='kubectl resource-capacity'
+
+# read  ga-vm-configs/krew
