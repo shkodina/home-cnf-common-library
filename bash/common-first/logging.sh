@@ -20,3 +20,5 @@ function f_log_info () {
     echo -e "${CLR_YELLOW}##  $@"
     echo -e "${CLR_NC}"
 }
+
+function f_log_timestamp () { date +"%T %d"/%m/%Y ;}
