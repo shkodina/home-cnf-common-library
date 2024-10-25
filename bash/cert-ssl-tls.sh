@@ -84,8 +84,6 @@ function fssl-create-cert-mtls() {
 
 
 
-export ANSIBLE_VAULT_PASSWORD_FILE_CONTENT="$(cat ${ANSIBLE_VAULT_PASSWORD_FILE})"
-
 function fssl () {
     local cmd=$1
     test "$cmd" == "" && cmd=$(type $FUNCNAME | grep selector | grep -v grep | sort | cut -d'"' -f2 | fzf)
@@ -111,7 +109,7 @@ function fssl () {
         "encrypt-str-by-vault" | "selector" ) 
             local lstr=$2
             test -z $lstr && read -p 'str to encrypt: ' lstr
-            echo "$lstr" | openssl enc -base64 -aes-256-cbc -nosalt -pass pass:"$ANSIBLE_VAULT_PASSWORD_FILE_CONTENT" -e -A 2>>/dev/null
+            echo "$lstr" | openssl enc -base64 -aes-256-cbc -nosalt -pass pass:"$(cat ${ANSIBLE_VAULT_PASSWORD_FILE})" -e -A 2>>/dev/null
             return
         ;;
 
@@ -129,7 +127,7 @@ function fssl () {
         "decrypt-str-by-vault" | "selector" ) 
             local lstr=$2
             test -z $lstr && read -p 'str to encrypt: ' lstr
-            echo "$lstr" | openssl enc -base64 -aes-256-cbc -nosalt -pass pass:"$ANSIBLE_VAULT_PASSWORD_FILE_CONTENT" -d 2>>/dev/null
+            echo "$lstr" | openssl enc -base64 -aes-256-cbc -nosalt -pass pass:"$(cat ${ANSIBLE_VAULT_PASSWORD_FILE})" -d 2>>/dev/null
             return
         ;;
 
@@ -150,7 +148,7 @@ function fssl () {
             local lfile=$2
             test -z $lfile && read -p 'file to encrypt: ' lfile
             local tmp=$(mktemp)
-            openssl enc -k "$ANSIBLE_VAULT_PASSWORD_FILE_CONTENT" -aes256 -base64 -e -in "$lfile" -out $tmp 2>>/dev/null
+            openssl enc -k "$(cat ${ANSIBLE_VAULT_PASSWORD_FILE})" -aes256 -base64 -e -in "$lfile" -out $tmp 2>>/dev/null
             cat $tmp && rm $tmp
             return
         ;;
@@ -170,7 +168,7 @@ function fssl () {
             local lfile=$2
             test -z $lfile && read -p 'file to encrypt: ' lfile
             local tmp=$(mktemp)
-            openssl enc -k "$ANSIBLE_VAULT_PASSWORD_FILE_CONTENT" -aes256 -base64 -d -in "$lfile" -out $tmp 2>>/dev/null
+            openssl enc -k "$(cat ${ANSIBLE_VAULT_PASSWORD_FILE})" -aes256 -base64 -d -in "$lfile" -out $tmp 2>>/dev/null
             cat $tmp && rm $tmp
             return
         ;;
