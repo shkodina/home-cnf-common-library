@@ -31,6 +31,7 @@ function rpwd4 () { echo ; openssl rand -base64 32 ; echo; }
 # }
 
 # function fmtex-hide-yopass-message() {
+#     test -e $HOME_CNF_ETC_DIR/etc/py/yopass_api_mtex.py || return
 #     $HOME_CNF_ETC_DIR/etc/py/yopass_api_mtex.py -d "$1"
 # }
 
