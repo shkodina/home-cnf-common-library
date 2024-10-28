@@ -39,7 +39,7 @@ alias xa='xargs '
 alias xargs='xargs '
 
 alias d64='base64 -d'
-alias reinit='source ~/.bashrc'
+alias reinit='EXPORT REINIT=true; source ~/.bashrc'
 
 alias rmlinks='find . -maxdepth 1 -type l | xargs rm'
 
