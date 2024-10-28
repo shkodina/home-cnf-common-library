@@ -179,7 +179,7 @@ function ken () {
 ##     ## ######## ######## ##        ######## ##     ## 
 
 function fk () {
-    local cmd=$(type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | fzf )
+    local cmd=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | fzf )
 
     case $cmd in
         "get" | "selector" ) fget ; return ;; 
