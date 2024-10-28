@@ -70,6 +70,10 @@ cat << EOF
   kubectl get  secretstore.external-secrets.io
   kubectl get  clustersecretstore.external-secrets.io
   kubectl get  externalsecret.external-secrets.io
+
+  fgy  secretstore.external-secrets.io
+  fgy  clustersecretstore.external-secrets.io
+  fgy  externalsecret.external-secrets.io
 EOF
 }
 # alias  es=externalsecret.external-secrets.io
