@@ -97,7 +97,7 @@ function fginfo () {
   do 
     kubectl get cm -oyaml ${app}-cm-deploy-info | 
     yq .data |
-    grep -E "URL|gitlab_cnf_link" | 
+    grep -i -E "URL|gitlab_cnf_link" | 
     grep 'https://' | 
     cut -d: -f2- | 
     sort -u
