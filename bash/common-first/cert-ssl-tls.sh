@@ -83,6 +83,10 @@ function fssl-create-cert-mtls() {
 }
 
 
+function fssl-list-all-certs () {
+    awk -v cmd='openssl x509 -noout -subject' '/BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
+}
+
 
 function fssl () {
     local cmd=$1
@@ -179,7 +183,8 @@ function fssl () {
         "mtex" | "selector" ) flib-openssl ; return ;;
         "pipelines" | "selector" ) flib-openssl ; return ;;
 
-
+        "list-all-certs" | "selector" ) fssl-list-all-certs ; return ;;
+       
         * ) 
             >&2 echo "wrong command:   $cmd"
             >&2 echo "available commands are:"
