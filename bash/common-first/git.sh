@@ -276,13 +276,13 @@ function f_lib_generate_version () {
     # тут если версия из артефатов или первого объеявления не пуста и не совпала
     test "$PREDEFINED_VERSION" != "" && \
         test "$PREDEFINED_VERSION" != "$VERSION" && \
-            а_log_info "PREDEFINED_VERSION: $PREDEFINED_VERSION  DIFF FROM VERSION: $VERSION" && \
+            f_log_info "PREDEFINED_VERSION: $PREDEFINED_VERSION  DIFF FROM VERSION: $VERSION" && \
                 export VERSION=$PREDEFINED_VERSION
 
     # тут если версия юзерская и не совпала, то сделаем мегакостылем ее главной
     test "$USER_DEFINED_VERSION" != "" ] && \
         test "$USER_DEFINED_VERSION" != "$VERSION" && \
-            а_log_info "USER_DEFINED_VERSION: $USER_DEFINED_VERSION  DIFF FROM VERSION: $VERSION" && \
+            f_log_info "USER_DEFINED_VERSION: $USER_DEFINED_VERSION  DIFF FROM VERSION: $VERSION" && \
                 export VERSION=$USER_DEFINED_VERSION
 
     export VERSION=$VERSION
