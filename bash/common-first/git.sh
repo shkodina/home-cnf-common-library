@@ -231,7 +231,7 @@ function fgit () {
         "pull-all" | "selector" )
             find . -type d -name ".git" | while read d; 
               do 
-                log_info "$d";
+                f_log_info "$d";
                 git -C ${d%/*}/ pull; 
               done
             return ;;
