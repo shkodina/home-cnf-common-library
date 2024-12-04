@@ -98,6 +98,23 @@ function fkc-node-drain () {
   kubectl drain $keys $lnode
 }
 
+function fkc-node-prepare-tg-apply-worker () {
+  local i=0
+  kubectl get no | grep worker | while read w s; do echo $w; done | sort | while read w
+  do
+    cat << EOF
+kubectl cordon $w;
+sleep 10;
+timeout -s SIGKILL 600 kubectl drain --ignore-daemonsets --delete-emptydir-data $w;
+sleep 60;
+terragrunt apply --auto-approve --target="yandex_compute_instance.instance[$i]";
+sleep 600;
+EOF
+  ((i++))
+  done
+  
+}
+
 ########  ##     ##          ########  ##     ##  ######  
 ##     ## ##     ##          ##     ## ##     ## ##    ## 
 ##     ## ##     ##          ##     ## ##     ## ##       
