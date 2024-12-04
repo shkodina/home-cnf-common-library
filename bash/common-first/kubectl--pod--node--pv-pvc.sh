@@ -109,6 +109,7 @@ timeout -s SIGKILL 600 kubectl drain --ignore-daemonsets --delete-emptydir-data 
 sleep 60;
 terragrunt apply --auto-approve --target="yandex_compute_instance.instance[$i]";
 sleep 600;
+kubectl uncordon $w;
 EOF
   ((i++))
   done
