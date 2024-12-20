@@ -1,8 +1,8 @@
 #!/bin/bash
 
 function switch_kubie_ctx_ns () {
-    echo kubie ctx $1 -n $2
-    kubie ctx $1 -n $2
+    echo kubie ctx -n $2 $1 
+    kubie ctx -n $2 $1
 }
 
 function fkn () {
