@@ -192,6 +192,8 @@ function fk () {
         "node-cordone" | "selector" ) fkc-node-cordone ; return ;;
         "node-uncordone" | "selector" ) fkc-node-uncordone ; return ;;
         "node-drain" | "selector" ) fkc-node-drain ; return ;;
+        "node-shell" | "selector" ) fkc-node-shell ; return ;;
+        
 
 
         "pod-limits" | "selector" ) fkc-pods-with-limits ; return ;;
