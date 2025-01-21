@@ -116,6 +116,10 @@ EOF
   
 }
 
+function fkc-node-shell () {
+  kubectl node-shell $(kubectl get no -oname | cut -d / -f2 | fzf)
+}
+
 ########  ##     ##          ########  ##     ##  ######  
 ##     ## ##     ##          ##     ## ##     ## ##    ## 
 ##     ## ##     ##          ##     ## ##     ## ##       
