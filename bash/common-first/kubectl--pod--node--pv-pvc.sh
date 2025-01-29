@@ -46,6 +46,17 @@ function fkc-pods-port-proxy () {
   kubectl port-forward $pod $lport:$podport
 }
 
+function fkc-pod-debug () {
+    local dimages="
+    harbor.tech.mvideo.ru/mvideoru/quasar/devops/maintenance/toolbox/master/quasar-toolbox-u22-full:latest
+    nicolaka/netshoot
+    "
+    local lpod=$(kubectl get po -oname | cut -d/ -f2 | fzf)
+    local lconname=$(kubectl get po -oyaml $lpod | yq -r .spec.containers[].name | fzf)
+    local udimage=$(echo $dimages | tr ' ' '\n' | fzf)
+
+    kubectl debug -it $lpod --image=$udimage --target=$lconname
+}
 
 ##    ##  #######  ########  ########  ######  
 ###   ## ##     ## ##     ## ##       ##    ## 
