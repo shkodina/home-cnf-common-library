@@ -94,8 +94,14 @@ function fkc-node-ssh-to () {
 
 
 function fkc-node-debug () {
+    local dimages="
+    ubuntu
+    nicolaka/netshoot
+    harbor.tech.mvideo.ru/mvideoru/quasar/devops/maintenance/toolbox/master/quasar-toolbox-u22-full:latest
+    "
     local nnode=$(kubectl get node -oname | fzf )
-    kubectl debug $nnode -it --image=ubuntu
+    local udimage=$(echo $dimages | tr ' ' '\n' | fzf)
+    kubectl debug $nnode -it --image=$udimage
     kubectl get po -oname | grep node-debugger | grep ${nnode//node\/} | xargs kubectl delete
 }
 
