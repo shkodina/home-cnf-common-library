@@ -49,6 +49,8 @@ function fkc-pods-port-proxy () {
 function fkc-pod-debug () {
     local dimages="
     harbor.tech.mvideo.ru/mvideoru/quasar/devops/maintenance/toolbox/master/quasar-toolbox-u22-full:latest
+    harbor.tech.mvideo.ru/mvideoru/quasar/devops/maintenance/toolbox/master/quasar-toolbox-kafka-tools:latest
+    harbor.tech.mvideo.ru/mvideoru/quasar/devops/maintenance/toolbox/master/quasar-toolbox-kafka-tools:0.0.1-101-8772e0de
     nicolaka/netshoot
     "
     local lpod=$(kubectl get po -oname | cut -d/ -f2 | fzf)
