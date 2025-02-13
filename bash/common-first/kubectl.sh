@@ -21,6 +21,10 @@ function fgy () {  # $1 = k8s source name  $2 = pod name
 	test -z $2 || kubectl get $src_name -oyaml $2
 }	
 
+function fgy-meta(){
+  fgy $1 | yq -r .metadata
+}
+
 ######## ##     ## ########  ######  
 ##        ##   ##  ##       ##    ## 
 ##         ## ##   ##       ##       
