@@ -41,6 +41,13 @@ function fdocker () {
             return
         ;;
 
+        "fee" | "selector" ) 
+            local  cname=$(docker ps --format '{{json .}}' | jq -r .Names | fzf)
+            docker exec -it $cname bash
+            return
+        ;;
+
+
         "clenup" | "selector" ) 
             $sudo_prefix docker image prune -af
             $sudo_prefix docker builder prune -af
