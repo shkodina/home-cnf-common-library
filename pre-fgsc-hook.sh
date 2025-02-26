@@ -1,4 +1,5 @@
 #!/bin/bash
+>&2 echo "### INFO-TO-ERR: run prehook"
 
 find bash -type f -name "*.sh" | 
 sort | 
