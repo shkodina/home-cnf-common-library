@@ -1,4 +1,7 @@
 
+command -v helm && complete -o default -F __start_helm helm
+command -v helm && source <(helm completion bash)
+
 function fhelm-roll-back-chart-by-grep-from-history () {
 
     APP=${1:?"Error. You must supply helm release name."}

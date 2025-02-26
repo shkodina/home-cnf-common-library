@@ -1,11 +1,11 @@
 
 
-
-source <(kubectl completion bash)
+command -v kubectl && source <(kubectl completion bash)
 
 alias kc='kubectl'
 complete -F __start_kubectl kc
-source <(helm completion bash)
+
+command -v kubectl && complete -F __start_kubectl kc
 
 function fkc-gen-full-config-from-splited-configs () {
     export KUBECONFIGS_DIR="~/.kube/splited_kubeconfigs/configs/"

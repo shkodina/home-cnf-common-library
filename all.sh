@@ -74,30 +74,14 @@ alias kube-capacity='kubectl resource-capacity'
 # read  ga-vm-configs/krew
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --inline-info'
-source <(kubectl completion bash)
+command -v kubectl && source <(kubectl completion bash)
 alias kc='kubectl'
 complete -F __start_kubectl kc
-source <(helm completion bash)
+command -v kubectl && complete -F __start_kubectl kc
 function fkc-gen-full-config-from-splited-configs () {
     export KUBECONFIGS_DIR="~/.kube/splited_kubeconfigs/configs/"
     export KUBECONFIG=$(find ${KUBECONFIGS_DIR} -type f | tr '\n' ':')
     kubectl config view --flatten > ~/.kube/config
-}
-complete -o default -F __start_helm helm
-function fhelm-roll-back-chart-by-grep-from-history () {
-    APP=${1:?"Error. You must supply helm release name."}
-    GREP_STR=${2:?"Error. You must supply a grep string to select revision."}
-    helm history ${APP} | grep -v "${GREP_STR}" | while read rrev stub; do echo $rrev $stub; echo $rrev; let rrev--; echo $rrev; helm rollback ${APP} $rrev; done
-}
-function fhelm-roll-back-last () {
-    APP=${1:?"Error. You must supply helm release name."}
-    helm history ${APP} | tail -n 1 | while read rrev stub; do echo $rrev $stub; echo $rrev; let rrev--; echo $rrev; helm rollback ${APP} $rrev; done
-}
-function fhelm () {
-    helm $@ $(  helm list -a |
-                fzf |
-                while read x1 stuff; do echo $x1; done
-            )
 }
 test -e /usr/bin/terraform && complete -C /usr/bin/terraform terraform || true
 alias tf=terraform
@@ -638,6 +622,8 @@ function f_lib_generate_version () {
     export VERSION=$VERSION
     # echo VERSION="${VERSION}" > $CI_PROJECT_DIR/variables.env
 }
+command -v helm && complete -o default -F __start_helm helm
+command -v helm && source <(helm completion bash)
 function fhelm-roll-back-chart-by-grep-from-history () {
     APP=${1:?"Error. You must supply helm release name."}
     GREP_STR=${2:?"Error. You must supply a grep string to select revision."}
