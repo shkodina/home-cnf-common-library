@@ -33,3 +33,14 @@ function mkcdir ()
     mkdir -p -- "$tdir" 
        cd -P -- "$tdir"
 }
+
+function sudoaptupdateaptupgrade () {
+    export DEBIAN_FRONTEND=noninteractive
+    sudo apt update 
+    sudo apt upgrade -y 
+    sudo apt autoremove
+    sudo apt upgrade -y | 
+        grep -q 'The following packages have been kept back:' && {
+            echo 'run sudo apt-get --with-new-pkgs upgrade <list of packages kept back>'"
+        }
+}

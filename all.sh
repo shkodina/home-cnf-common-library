@@ -300,6 +300,16 @@ function mkcdir ()
     mkdir -p -- "$tdir"
        cd -P -- "$tdir"
 }
+function sudoaptupdateaptupgrade () {
+    export DEBIAN_FRONTEND=noninteractive
+    sudo apt update
+    sudo apt upgrade -y
+    sudo apt autoremove
+    sudo apt upgrade -y |
+        grep -q 'The following packages have been kept back:' && {
+            echo 'run sudo apt-get --with-new-pkgs upgrade <list of packages kept back>'"
+        }
+}
 function fcnf-add-data-after-mask-from-file-in-file () {
     local mask=$1
     local data_file=$2
