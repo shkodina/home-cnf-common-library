@@ -1,7 +1,5 @@
 export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible/vaults/deployer
 export SELF_STORE_KEY_FILE=~/.etc/self-stor-key-file
-export HOME_CNF_ETC_DIR=~/home_cnf/init.scripts
-export HOME_CNF_LIBRARY__ALL_RAW__URL="https://raw.githubusercontent.com/shkodina/home-cnf-common-library/refs/heads/main/all.sh"
 export CLR_RED='\033[0;31m'
 export CLR_GREEN='\033[0;32m'
 export CLR_ORANGE='\033[0;33m'
@@ -85,6 +83,25 @@ function fkc-gen-full-config-from-splited-configs () {
     export KUBECONFIG=$(find ${KUBECONFIGS_DIR} -type f | tr '\n' ':')
     kubectl config view --flatten > ~/.kube/config
 }
+complete -o default -F __start_helm helm
+function fhelm-roll-back-chart-by-grep-from-history () {
+    APP=${1:?"Error. You must supply helm release name."}
+    GREP_STR=${2:?"Error. You must supply a grep string to select revision."}
+    helm history ${APP} | grep -v "${GREP_STR}" | while read rrev stub; do echo $rrev $stub; echo $rrev; let rrev--; echo $rrev; helm rollback ${APP} $rrev; done
+}
+function fhelm-roll-back-last () {
+    APP=${1:?"Error. You must supply helm release name."}
+    helm history ${APP} | tail -n 1 | while read rrev stub; do echo $rrev $stub; echo $rrev; let rrev--; echo $rrev; helm rollback ${APP} $rrev; done
+}
+function fhelm () {
+    helm $@ $(  helm list -a |
+                fzf |
+                while read x1 stuff; do echo $x1; done
+            )
+}
+test -e /usr/bin/terraform && complete -C /usr/bin/terraform terraform || true
+alias tf=terraform
+alias tg=terragrunt
 function aves () {
     test -e ./ansible.cfg && local avesid="--encrypt-vault-id deployer"
     local tmp_all=/tmp/$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
@@ -309,6 +326,15 @@ function sudoaptupdateaptupgrade () {
         grep -q 'The following packages have been kept back:' && {
             echo 'run sudo apt-get --with-new-pkgs upgrade <list of packages kept back>'
         }
+}
+function ftool-list-all-colors (){
+    for i in {1..50}; do echo -e "\033[0;${i}m SOME Color of 0 ${i} \033[0m" ; echo -e "\033[1;${i}m SOME Color of 1 ${i} \033[0m"; done;
+    echo '\033[_;_m'
+    set | grep -E "^CLR_.*"
+}
+alias fcolors=ftool-list-all-colors
+function ffind () {
+    find . -type f -iname "*$1*"
 }
 function fcnf-add-data-after-mask-from-file-in-file () {
     local mask=$1
@@ -623,7 +649,61 @@ function fhelm () {
                 while read x1 stuff; do echo $x1; done
             )
 }
-##        #######   ######
+##     ## ######## ##       ########  ######## ########
+##     ## ##       ##       ##     ## ##       ##     ##
+##     ## ##       ##       ##     ## ##       ##     ##
+######### ######   ##       ########  ######   ########
+##     ## ##       ##       ##        ##       ##   ##
+##     ## ##       ##       ##        ##       ##    ##
+##     ## ######## ######## ##        ######## ##     ##
+function futils () {
+    local cmd=$1
+    test "$cmd" == "" && cmd=$(type $FUNCNAME | grep selector | grep -v grep | sort | cut -d'"' -f2 | fzf)
+    case $cmd in
+        "rpwd-date" | "selector" )
+            rpwd1
+            echo "use fmtex-hide-yopass-message"
+            return
+        ;;
+        "rpwd-random" | "selector" )
+            rpwd2
+            echo "use fmtex-hide-yopass-message"
+            return
+        ;;
+        "rpwd-readable" | "selector" )
+            rpwd3
+            echo "use fmtex-hide-yopass-message"
+            return
+        ;;
+        "rpwd-openssl" | "selector" )
+            rpwd4
+            echo "use fmtex-hide-yopass-message"
+            return
+        ;;
+        "rpwd-all-and-hide" | "selector" ) rpwd ; return;;
+        "vault" | "selector" ) fvault-cli ; return ;;
+        "hide" | "selector" )
+            read -p 'Enter secret word to hide: ' spassword
+            fmtex-hide-yopass-message "$spassword"
+            return
+        ;;
+        "chown-all-piper" | "selector" )
+            chown -R piper:piper .
+            return
+        ;;
+        "helper-tmp-temporary-scripts" | "selector" )
+            local lpath="~/home_cnf/temporary-scripts/"
+            ls -1 $lpath | fzf | xargs bash
+            return
+        ;;
+        * )
+            >&2 echo "wrong command:   $cmd"
+            >&2 echo "available commands are:"
+            type $FUNCNAME | grep selector | grep -v grep | sort | cut -d'"' -f2
+        ;;
+    esac
+}
+alias fu=futils##        #######   ######
 ##       ##     ## ##    ##
 ##       ##     ## ##
 ##       ##     ## ##   ####
@@ -1438,6 +1518,12 @@ function rpwd () {
     echo -e "\n\n"
     # fhide-note-message "$p4"
 }
+function sshtmp () {
+    ssh -o "ConnectTimeout 3" \
+        -o "StrictHostKeyChecking no" \
+        -o "UserKnownHostsFile /dev/null" \
+            "$@"
+}
 function f_telegram_notice_bot() {
     local x=
     local usege="Usage: $FUNCNAME  <token>  <chat_id>  <thread_id>  <message>"
@@ -1451,6 +1537,7 @@ function f_telegram_notice_bot() {
     -F text="$4 $5" \
     "https://api.telegram.org/bot$1/sendMessage" >/dev/null
 }
+test -e /usr/bin/vault && complete -C /usr/bin/vault vault || true
 function fvault-add-value-to-server-from-vault-secret () {  #  $1=kv  $2=secret  $3=key  $4=vault-string
     test -z $4 && { echo 'Usage: cmd  (1)kv_name  (2)secret_name  (3)key  (4)vault_string_from_ansible' ; return 1 ; }
     local vval=$(avesdjs $4 | jq '.var_from_file' | cut -d '"' -f2)
@@ -1603,5 +1690,5 @@ function fdocker () {
     esac
 }
 function  fhomecnf-update-libs () {
-    wget $HOME_CNF_LIBRARY__ALL_RAW__URL -O $HOME_CNF_ETC_DIR/extra/home-cnf-lib-all.sh
+    wget ${HOME_CNF_LIBRARY__ALL_RAW__URL} -O ${HOME_CNF_LIBRARY__ALL_RAW__LFILE}
 }

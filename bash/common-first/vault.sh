@@ -1,3 +1,5 @@
+test -e /usr/bin/vault && complete -C /usr/bin/vault vault || true
+
 function fvault-add-value-to-server-from-vault-secret () {  #  $1=kv  $2=secret  $3=key  $4=vault-string
     test -z $4 && { echo 'Usage: cmd  (1)kv_name  (2)secret_name  (3)key  (4)vault_string_from_ansible' ; return 1 ; }
     local vval=$(avesdjs $4 | jq '.var_from_file' | cut -d '"' -f2)
