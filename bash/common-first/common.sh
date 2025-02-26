@@ -28,7 +28,7 @@ function fcd () { cd $(dirname $(realpath $1)) ; }
 function mkcdir ()
 {
     local tdir=${1:-"/tmp/$(fdate)"}
-    mkdir -p -- "$tdir" &&
+    mkdir -p -- "$tdir" 
        cd -P -- "$tdir"
 }
 
