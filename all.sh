@@ -313,7 +313,7 @@ function fcd () {
 }
 function mkcdir ()
 {
-    local tdir=${1:-"/tmp/$(fdate)"}
+    local tdir=${1:-"/tmp/$(fddate)"}
     mkdir -p -- "$tdir"
        cd -P -- "$tdir"
 }
@@ -353,6 +353,9 @@ function ddate () {
 }
 function fdate () {
     date +"%T:%N_%d.%m.%Y"
+}
+function fddate () {
+    date +"%H_%M_%S___%N___%d_%m_%Y"
 }
  #!/bin/bash
    ###    ##       ####    ###     ######  ########  ######
@@ -395,6 +398,7 @@ function felk () {
         ;;
     esac
 }
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 function prepare_select_for_fzf () {
   echo $@ | cut -d ' ' -f 3- | tr '|' '\n' | tr ' ' '\n' | sed -e '/\[/d;/\]/d;s/(.*)//' | sort | uniq
 }
