@@ -1,3 +1,6 @@
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+
 function prepare_select_for_fzf () {
   echo $@ | cut -d ' ' -f 3- | tr '|' '\n' | tr ' ' '\n' | sed -e '/\[/d;/\]/d;s/(.*)//' | sort | uniq
 }
