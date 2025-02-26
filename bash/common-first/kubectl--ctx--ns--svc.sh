@@ -1,5 +1,3 @@
-#!/bin/bash
-
 function switch_kubie_ctx_ns () {
     echo kubie ctx -n $2 $1 
     kubie ctx -n $2 $1

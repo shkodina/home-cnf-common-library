@@ -341,7 +341,6 @@ function fdate () {
 function fddate () {
     date +"%H_%M_%S___%N___%d_%m_%Y"
 }
- #!/bin/bash
    ###    ##       ####    ###     ######  ########  ######
   ## ##   ##        ##    ## ##   ##    ## ##       ##    ##
  ##   ##  ##        ##   ##   ##  ##       ##       ##
@@ -868,7 +867,6 @@ function fkc-rollout-statefulset () {
     kubectl  rollout restart statefulset $d
   done
 }
-#!/bin/bash
 function switch_kubie_ctx_ns () {
     echo kubie ctx -n $2 $1
     kubie ctx -n $2 $1
@@ -1575,7 +1573,6 @@ function fvault-cli-get-value-from-root () {  #  $1 path  $2 key(field)
         vault kv get -field=$f $1$2
     }
 }
-#!/bin/bash
    ###    ##       ####    ###     ######  ########  ######
   ## ##   ##        ##    ## ##   ##    ## ##       ##    ##
  ##   ##  ##        ##   ##   ##  ##       ##       ##
