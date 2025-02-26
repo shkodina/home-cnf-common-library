@@ -29,7 +29,7 @@ function fcd () {
 
 function mkcdir ()
 {
-    local tdir=${1:-"/tmp/$(fdate)"}
+    local tdir=${1:-"/tmp/$(fddate)"}
     mkdir -p -- "$tdir" 
        cd -P -- "$tdir"
 }
