@@ -10,9 +10,21 @@ function fget-src () {
     kubectl api-resources | fzf | cut -d' ' -f1
 }
 
-function fget_helper () { test -z $1 && kubectl get $(fget-src) --no-headers || kubectl get $1 --no-headers ; }
-function fget () { fget_helper $1 | fzf | cut -d' ' -f1 ; }
-function fgetm () { fget_helper $1 | fzf -m | cut -d' ' -f1 ; }
+function fget_helper () { 
+  test -z $1 \
+  && kubectl get $(fget-src) --no-headers \
+  || kubectl get $1 --no-headers 
+}
+
+function fget () { 
+  local list=$(fget_helper $1) 
+  echo -e "$list" | fzf | f1
+}
+
+function fgetm () { 
+  local list=$(fget_helper $1) 
+  echo -e "$list" | fzf -m | f1
+}
 
 function fgy () {  # $1 = k8s source name  $2 = pod name
 	local src_name=$1
