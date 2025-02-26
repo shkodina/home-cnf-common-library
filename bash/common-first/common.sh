@@ -23,7 +23,9 @@ function rtmp () {  # FUNCTION RANDOM TMP
     echo /tmp/$fname
 }
 
-function fcd () { cd $(dirname $(realpath $1)) ; }
+function fcd () { 
+    cd $(dirname $(realpath $1))
+}
 
 function mkcdir ()
 {
@@ -31,7 +33,3 @@ function mkcdir ()
     mkdir -p -- "$tdir" 
        cd -P -- "$tdir"
 }
-
-function cdtmp () { mkcdir /tmp/$(fdate) ; }
-alias fcdtmp=cdtmp
-
