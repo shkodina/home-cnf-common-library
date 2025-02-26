@@ -44,3 +44,14 @@ function sudoaptupdateaptupgrade () {
             echo 'run sudo apt-get --with-new-pkgs upgrade <list of packages kept back>'
         }
 }
+
+function ftool-list-all-colors (){
+    for i in {1..50}; do echo -e "\033[0;${i}m SOME Color of 0 ${i} \033[0m" ; echo -e "\033[1;${i}m SOME Color of 1 ${i} \033[0m"; done;
+    echo '\033[_;_m'
+    set | grep -E "^CLR_.*"
+}
+alias fcolors=ftool-list-all-colors
+
+function ffind () {
+    find . -type f -iname "*$1*"
+}
