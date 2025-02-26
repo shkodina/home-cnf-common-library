@@ -74,10 +74,10 @@ alias kube-capacity='kubectl resource-capacity'
 # read  ga-vm-configs/krew
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --inline-info'
-command -v kubectl && source <(kubectl completion bash)
+command -v kubectl &>/dev/null && source <(kubectl completion bash)
 alias kc='kubectl'
 complete -F __start_kubectl kc
-command -v kubectl && complete -F __start_kubectl kc
+command -v kubectl  &>/dev/null && complete -F __start_kubectl kc
 function fkc-gen-full-config-from-splited-configs () {
     export KUBECONFIGS_DIR="~/.kube/splited_kubeconfigs/configs/"
     export KUBECONFIG=$(find ${KUBECONFIGS_DIR} -type f | tr '\n' ':')
@@ -622,8 +622,8 @@ function f_lib_generate_version () {
     export VERSION=$VERSION
     # echo VERSION="${VERSION}" > $CI_PROJECT_DIR/variables.env
 }
-command -v helm && complete -o default -F __start_helm helm
-command -v helm && source <(helm completion bash)
+command -v helm  &>/dev/null && complete -o default -F __start_helm helm
+command -v helm  &>/dev/null && source <(helm completion bash)
 function fhelm-roll-back-chart-by-grep-from-history () {
     APP=${1:?"Error. You must supply helm release name."}
     GREP_STR=${2:?"Error. You must supply a grep string to select revision."}
