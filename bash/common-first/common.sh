@@ -41,6 +41,6 @@ function sudoaptupdateaptupgrade () {
     sudo apt autoremove
     sudo apt upgrade -y | 
         grep -q 'The following packages have been kept back:' && {
-            echo 'run sudo apt-get --with-new-pkgs upgrade <list of packages kept back>'"
+            echo 'run sudo apt-get --with-new-pkgs upgrade <list of packages kept back>'
         }
 }

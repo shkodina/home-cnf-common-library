@@ -6,3 +6,8 @@ xargs cat |
 sed "s/ *$//g" |
 sed "/^ *$/d" |
 cat > all.sh
+
+# find bash -type f -name "*.sh" | 
+# sort | 
+# xargs cat |
+# cat > all.sh

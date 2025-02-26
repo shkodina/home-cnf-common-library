@@ -307,7 +307,7 @@ function sudoaptupdateaptupgrade () {
     sudo apt autoremove
     sudo apt upgrade -y |
         grep -q 'The following packages have been kept back:' && {
-            echo 'run sudo apt-get --with-new-pkgs upgrade <list of packages kept back>'"
+            echo 'run sudo apt-get --with-new-pkgs upgrade <list of packages kept back>'
         }
 }
 function fcnf-add-data-after-mask-from-file-in-file () {
@@ -386,6 +386,7 @@ function fgit-safe-commit () {
   git pull
   test "$1" == "" && git-commiter fast
   test "$1" == "." && test -z "$2" && git-commiter || git-commiter fast "$2"
+  test -e ./pre-fgsc-hook.sh && ./pre-fgsc-hook.sh
   git commit -am "$GC_MESSAGE"
   git push
   echo -e "${CLR_GREEN}$(git config --get remote.origin.url | tr ':' '/' | sed -e 's/git@/http:\/\//' | sed -e 's/\.git/\/-\/pipelines/' )${CLR_NC}"
