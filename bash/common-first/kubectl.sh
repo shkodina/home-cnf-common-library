@@ -26,15 +26,14 @@ function fgetm () {
   echo -e "$list" | fzf -m | f1
 }
 
-function fgy () {  # $1 = k8s source name  $2 = pod name
-	local src_name=$1
-        test -z $src_name && src_name=$(kubectl api-resources | fzf | cut -d' ' -f1)
-	test -z $2 && kubectl get $src_name -oyaml $(fget $src_name)
-	test -z $2 || kubectl get $src_name -oyaml $2
+function fgy () {  # $1 = k8s source name  $2 = source name
+  local src_name=${1:-$(fget-src)}
+	local obj_name=${2:-$(fgetm $src_name)}
+  kubectl get $src_name $obj_name -oyaml
 }	
 
 function fgy-meta(){
-  fgy $1 | yq -r .metadata
+  fgy $1 $2 | yq -r .metadata
 }
 
 ######## ##     ## ########  ######  
