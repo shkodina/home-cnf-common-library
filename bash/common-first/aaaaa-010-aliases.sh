@@ -39,7 +39,7 @@ alias xa='xargs '
 alias xargs='xargs '
 
 alias d64='base64 -d'
-alias reinit='export REINIT=true; source ~/.bashrc'
+alias reinit='fhomecnf-update-libs; source ~/.bashrc' # bash/personal-second/helpers.sh
 
 alias rmlinks='find . -maxdepth 1 -type l | xargs rm'
 
