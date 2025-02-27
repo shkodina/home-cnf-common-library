@@ -33,7 +33,7 @@ echo "INSTALL MONGO ############################################################
     && rm -rf $msh $mt $msh.* $mt.*
 
 echo "INSTALL APT MONGO ########################################################################" \
-    && curl -fsSL https://pgp.mongodb.com/server-6.0.asc | gpg -f --dearmor -o /etc/apt/trusted.gpg.d/mongodb-server-6.0.gpg \
+    && curl -fsSL https://pgp.mongodb.com/server-6.0.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/mongodb-server-6.0.gpg \
     && echo "deb [ arch=amd64,arm64 signed=/etc/apt/trusted.gpg.d/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list \
     && apt update \
     && apt install -y mongodb-org \
