@@ -79,6 +79,7 @@ function fk () {
         "info-full" | "selector" ) fginfo-full ; return ;;
 
 
+        "token-review" | "selector" ) echo "call: fkc-token-review  <token>" ; return ;;
 
         * ) 
             >&2 echo "wrong command:   $cmd"

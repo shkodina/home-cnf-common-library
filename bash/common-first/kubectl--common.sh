@@ -184,3 +184,29 @@ function ken () {
     kubie ns ${nslist}
   }
 }
+
+########  #######  ##    ## ######## ##    ## 
+   ##    ##     ## ##   ##  ##       ###   ## 
+   ##    ##     ## ##  ##   ##       ####  ## 
+   ##    ##     ## #####    ######   ## ## ## 
+   ##    ##     ## ##  ##   ##       ##  #### 
+   ##    ##     ## ##   ##  ##       ##   ### 
+   ##     #######  ##    ## ######## ##    ##
+
+function fkc-token-review () {
+  local ktoken=${1:?"Error. You must supply token value."}
+
+  tmp=/tmp/$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM.yaml
+
+cat > $tmp << EOF
+kind: TokenReview
+apiVersion: authentication.k8s.io/v1
+metadata:
+  name: test
+spec:
+  token: $ktoken
+EOF
+
+  echo kubectl apply -o yaml -f $tmp
+  kubectl apply -o yaml -f $tmp
+}
