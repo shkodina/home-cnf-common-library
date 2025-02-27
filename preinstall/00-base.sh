@@ -1,7 +1,8 @@
 #!/bin/bash
 
 echo "apt install #################################################################################" \
-    && apt update && apt upgrade -y \
+    && apt update \
+    && apt upgrade -y \
     && apt install -y \
         curl \
         jq \
