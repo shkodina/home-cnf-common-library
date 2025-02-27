@@ -1,7 +1,12 @@
 #!/bin/bash
->&2 echo "
-apt update ; apt install -y curl ; curl https://raw.githubusercontent.com/shkodina/home-cnf-common-library/refs/heads/main/preinstall/all.sh | bash
-"
+
+cat >> /dev/null << EOF
+url_base=https://raw.githubusercontent.com/shkodina/home-cnf-common-library/refs/heads/main/preinstall
+apt update
+apt install -y curl
+curl $url_base/all.sh
+curl $url_base/all.sh | bash
+EOF
 
 url_base=https://raw.githubusercontent.com/shkodina/home-cnf-common-library/refs/heads/main/preinstall
 
