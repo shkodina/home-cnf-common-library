@@ -56,4 +56,3 @@ echo "INSTALL POSTGRES #########################################################
     && apt install -y postgresql-client-16 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/archives/*.deb
-
