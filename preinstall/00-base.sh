@@ -4,6 +4,7 @@ echo "apt install ##############################################################
     && apt update \
     && apt upgrade -y \
     && apt install -y \
+        bash-completion \
         curl \
         jq \
         wget \

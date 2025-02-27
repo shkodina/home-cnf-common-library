@@ -11,3 +11,6 @@ curl ${url_base}/02-docker.sh   | bash
 curl ${url_base}/03-db.sh       | bash
 curl ${url_base}/04-netutils.sh | bash
 curl ${url_base}/05-users.sh    | bash
+curl ${url_base}/06-python.sh   | bash
+curl ${url_base}/07-k8s.sh      | bash
+curl ${url_base}/08-boosters.sh | bash
