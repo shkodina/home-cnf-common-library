@@ -14,3 +14,4 @@ curl ${url_base}/05-users.sh    | bash
 curl ${url_base}/06-python.sh   | bash
 curl ${url_base}/07-k8s.sh      | bash
 curl ${url_base}/08-boosters.sh | bash
+curl ${url_base}/09-terra.sh    | bash
