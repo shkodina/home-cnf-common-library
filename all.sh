@@ -20,7 +20,7 @@ export CLR_NC='\033[0m' # No Color
 ##    ##  ##          ##            ##        ##  ##       ##       ##     ##       ##
 ##    ##  ##          ##            ##        ##  ##       ##       ##     ## ##    ##
  ######   ########    ##            ##       #### ######## ######## ########   ######
-alias first="tr '\t' ' ' | cut -d' ' -f1"
+alias first='while read x1 last; do echo "$x1"; done'
 alias f1='first'
 alias second='while read x1 x2 last; do echo "$x2"; done'
 alias f2='second'
