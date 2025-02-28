@@ -62,7 +62,9 @@ function fk () {
         "ctx" | "selector" ) kubectl config view --minify -o jsonpath='{.current-context}' ; return ;; 
 
         "ns" | "selector" ) kubectl config view --minify -o jsonpath='{..namespace}' ; return ;; 
+        "ns-kill" | "selector" ) fkc-ns-kill ; return ;;
 
+        "svc-kill" | "selector" ) fkc-svc-kill ; return ;;
 
 
         "rollout-deploy" | "selector" ) fkc-rollout-deploy ; return ;;

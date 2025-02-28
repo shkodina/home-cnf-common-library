@@ -733,6 +733,8 @@ function fk () {
           return ;;
         "ctx" | "selector" ) kubectl config view --minify -o jsonpath='{.current-context}' ; return ;;
         "ns" | "selector" ) kubectl config view --minify -o jsonpath='{..namespace}' ; return ;;
+        "ns-kill" | "selector" ) fkc-ns-kill ; return ;;
+        "svc-kill" | "selector" ) fkc-svc-kill ; return ;;
         "rollout-deploy" | "selector" ) fkc-rollout-deploy ; return ;;
         "rollout-sts" | "selector" ) fkc-rollout-statefulset ; return ;;
         "secret-data" | "selector" ) fgetsecretdata ; return ;;
@@ -1123,11 +1125,31 @@ function fkn () {
       ##  ##   ##  ##
 ##    ##   ## ##   ##    ##
  ######     ###     ######
-function fkc-kill-svc () {
+function fkc-svc-kill () {
   local ss_svc=${1-$(fget svc)}
   kubectl patch service $ss_svc -p "{\"metadata\":{\"finalizers\":null}}"
   kubectl delete service $ss_svc
 }
+alias fkc-kill-svc=fkc-svc-kill
+##    ##  ######
+###   ## ##    ##
+####  ## ##
+## ## ##  ######
+##  ####       ##
+##   ### ##    ##
+##    ##  ######
+function fkc-ns-kill () {  #  $1 = ns_name
+  local ns_name=${1-$(fget ns)}
+  kubectl proxy &
+  kubectl get namespace $ns_name -o json |jq '.spec = {"finalizers":[]}' >/tmp/temp.json
+  curl -k -H "Content-Type: application/json" \
+    -X PUT \
+    --data-binary @/tmp/temp.json \
+    127.0.0.1:8001/api/v1/namespaces/$ns_name/finalize
+  rm -f /tmp/temp.json
+  ps ax | grep 'kubectl proxy' | grep -v grep | first | xargs kill -9
+}
+alias fkc-kill-ns=fkc-ns-kill
 ########   #######  ########   ######
 ##     ## ##     ## ##     ## ##    ##
 ##     ## ##     ## ##     ## ##
