@@ -40,6 +40,13 @@ echo "INSTALL APT MONGO ########################################################
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/archives/*.deb
 
+echo "INSTALL MONGO NEW ########################################################################" \
+    && wget https://downloads.mongodb.com/compass/mongodb-mongosh_2.4.2_amd64.deb \
+    && apt install ./mongodb-mongosh_2.4.2_amd64.deb \
+    && rm ./mongodb-mongosh_2.4.2_amd64.deb \
+    && wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2404-x86_64-100.11.0.deb \
+    && dpkg -i mongodb-database-tools-ubuntu2404-x86_64-100.11.0.deb \
+    && rm ./mongodb-database-tools-ubuntu2404-x86_64-100.11.0.deb
 
 ########   #######   ######  ########  ######   ########  ########  ######  
 ##     ## ##     ## ##    ##    ##    ##    ##  ##     ## ##       ##    ## 
