@@ -1,3 +1,5 @@
+# https://raw.githubusercontent.com/shkodina/home-cnf-common-library/refs/heads/main/bash/common-first/yc.sh
+
 function yc-activate-profile () {
     local profile=$(yc config profile list | cut -d ' ' -f1 | fzf)
     yc config profile activate ${profile}

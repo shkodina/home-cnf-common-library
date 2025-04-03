@@ -1616,6 +1616,7 @@ function fvault-cli-get-value-from-root () {  #  $1 path  $2 key(field)
         vault kv get -field=$f $1$2
     }
 }
+# https://raw.githubusercontent.com/shkodina/home-cnf-common-library/refs/heads/main/bash/common-first/yc.sh
 function yc-activate-profile () {
     local profile=$(yc config profile list | cut -d ' ' -f1 | fzf)
     yc config profile activate ${profile}
