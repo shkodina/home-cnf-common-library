@@ -9,6 +9,11 @@ echo "install kubectl  #########################################################
     && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl \
     && rm kubectl 
 
+echo "install kubie  ##############################################################################" \
+    && wget -O kubie https://github.com/sbstp/kubie/releases/download/v0.25.1/kubie-linux-amd64 \
+    && install -o root -g root -m 0755 kubie /usr/local/bin/kubie \
+    && rm kubie 
+
 echo "update bashrc  ##############################################################################" \
     && for u in sshuser piper blobby bob ansible; do \
         echo 'source /etc/bash_completion'       >> /home/$u/.bashrc ; \
