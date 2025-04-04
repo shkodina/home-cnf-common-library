@@ -14,6 +14,14 @@ echo "install kubie  ###########################################################
     && install -o root -g root -m 0755 kubie /usr/local/bin/kubie \
     && rm kubie 
 
+echo "install stern  ##############################################################################" \
+    && wget -O stern.tgz https://github.com/stern/stern/releases/download/v1.32.0/stern_1.32.0_linux_amd64.tar.gz \
+    && tar -xzf stern.tgz \
+    && install -o root -g root -m 0755 stern /usr/local/bin/stern \
+    && rm stern* LICENSE 
+
+    
+
 echo "update bashrc  ##############################################################################" \
     && for u in sshuser piper blobby bob ansible; do \
         echo 'source /etc/bash_completion'       >> /home/$u/.bashrc ; \
