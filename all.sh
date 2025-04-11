@@ -402,8 +402,8 @@ function fgit-safe-commit () {
   test -e ./pre-fgsc-hook.sh && ./pre-fgsc-hook.sh
   git commit -am "$GC_MESSAGE"
   git push
-  echo -e "${CLR_GREEN}$(git config --get remote.origin.url | tr ':' '/' | sed -e 's/git@/http:\/\//' | sed -e 's/\.git/\/-\/pipelines/' )${CLR_NC}"
-  echo -e "${CLR_YELLOW}$(git config --get remote.origin.url | tr ':' '/' | sed -e 's/git@/http:\/\//' | sed -e 's/\.git/\/-\/commits/'  )${CLR_NC}"
+  echo -e  "${CLR_GREEN}$(git config --get remote.origin.url | tr ':' '/' | sed -e 's/git@/http:\/\//' | sed -e 's/http:\/\/ssh-/http:\/\//' | sed -e 's/\.git/\/-\/pipelines/')${CLR_NC}"
+  echo -e "${CLR_YELLOW}$(git config --get remote.origin.url | tr ':' '/' | sed -e 's/git@/http:\/\//' | sed -e 's/http:\/\/ssh-/http:\/\//' | sed -e 's/\.git/\/-\/commits/'  )${CLR_NC}"
   test -z "${1}" && echo -e "Search commit message: ${CLR_GREEN}fast change commit $(date '+%Y.%m.%d %T')${CLR_NC}"
 }
  ######   #######  ##     ## ##     ## #### ######## ######## ######## ########
@@ -496,7 +496,8 @@ function fgit () {
         "get-base-url" | "selector" )
             git config --get remote.origin.url |
             tr ':' '/' |
-            sed -e 's/git@/http:\/\//'
+            sed -e 's/git@/http:\/\//' |
+            sed -e 's/http:\/\/ssh-/http:\/\//'
             return ;;
         "url" | "selector" ) $FUNCNAME get-base-url ; return ;;
 ######
