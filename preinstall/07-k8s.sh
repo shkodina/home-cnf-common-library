@@ -2,7 +2,8 @@
 
 echo "install helm  #################################################################################" \
     && curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash \
-    && helm plugin install https://github.com/databus23/helm-diff 
+    && helm plugin install https://github.com/databus23/helm-diff \
+    && helm plugin install https://github.com/chartmuseum/helm-push
 
 echo "install kubectl  ##############################################################################" \
     && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
