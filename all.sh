@@ -1685,7 +1685,7 @@ function fdocker () {
         ;;
         "build" | "selector" )
             local docker_file=$(find . -iname "*dockerfile" | fzf)
-            local docker_image_tmp_tag_name="test-build-image-to-delete:666.6.6-$(date +%N)"
+            local docker_image_tmp_tag_name="$(basename $(dirname ${docker_file}))-to-delete:666.6.6-$(date +%N)"
             $sudo_prefix docker build --pull --network host -t $docker_image_tmp_tag_name -f $docker_file .
             return
         ;;
