@@ -46,7 +46,7 @@ function fdocker () {
         ;;
 
 
-        "clenup" | "selector" ) 
+        "cleanup" | "selector" ) 
             $sudo_prefix docker image prune -af
             $sudo_prefix docker builder prune -af
             $sudo_prefix docker system prune -af
