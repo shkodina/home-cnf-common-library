@@ -89,7 +89,7 @@ EOF
  ######  ##     ##       #### ##    ## ##        #######  
  
 function fginfo () {
-  kubectl get cm -oname -l ga/cnf-type=info | 
+  kubectl get cm -oname -l cnf-type=info | 
   cut -d/ -f2 | 
   sed -e "s/-cm-deploy-info//g" |
   fzf -m | 
