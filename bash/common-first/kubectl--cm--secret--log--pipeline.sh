@@ -91,11 +91,11 @@ EOF
 function fginfo () {
   kubectl get cm -oname -l cnf-type=info | 
   cut -d/ -f2 | 
-  sed -e "s/-cm-deploy-info//g" |
+  sed -e "s/-deploy-info//g" |
   fzf -m | 
   while read app; 
   do 
-    kubectl get cm -oyaml ${app}-cm-deploy-info | 
+    kubectl get cm -oyaml ${app}-deploy-info | 
     yq .data |
     grep -i -E "URL|gitlab_cnf_link" | 
     grep 'https://' | 
@@ -105,9 +105,9 @@ function fginfo () {
 }
 
 function fginfo-full () {
-  kubectl get cm -oname -l ga/cnf-type=info | 
+  kubectl get cm -oname -l cnf-type=info | 
   cut -d/ -f2 | 
-  sed -e "s/-cm-deploy-info//g" |
+  sed -e "s/-deploy-info//g" |
   fzf | 
   xargs -I {} kubectl get cm -oyaml {}-cm-deploy-info | 
   yq .data
