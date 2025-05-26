@@ -848,7 +848,7 @@ function fginfo-full () {
   cut -d/ -f2 |
   sed -e "s/-deploy-info//g" |
   fzf |
-  xargs -I {} kubectl get cm -oyaml {}-cm-deploy-info |
+  xargs -I {} kubectl get cm -oyaml {}-deploy-info |
   yq .data
 }
 alias fginfof=fginfo-full ######   ######## ########
