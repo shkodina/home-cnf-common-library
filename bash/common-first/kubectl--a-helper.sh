@@ -27,6 +27,7 @@ function fk () {
         "pod-limits" | "selector" ) fkc-pods-with-limits ; return ;;
         "pod-kill" | "selector" ) fkill ; return ;;
         "pod-cleanup" | "selector" ) fkc-pods-cleanup ; return ;;
+        "pod-port-proxy" | "selector" ) fkc-pods-port-proxy ; return ;;
 
 
 
