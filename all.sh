@@ -1190,6 +1190,7 @@ function fkc-pods-port-proxy () {
   local pod=$(kubectl get po -oname | fzf)
   read -p 'set POD port: ' podport
   read -p 'set local port: ' lport
+  echo kubectl port-forward $pod $lport:$podport
   kubectl port-forward $pod $lport:$podport
 }
 function fkc-pod-debug () {
