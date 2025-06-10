@@ -61,13 +61,15 @@ function fdocker () {
             return
         ;;
 
-        "open-pwd-dir-in-selected-image" | "selector" ) 
+        "open-pwd-dir-in-selected-image" | "run" | "selector" ) 
             local limage=$($FUNCNAME select-i)
             read -p 'enter port number for listen: ' lport
+            read -p 'enter user uuid:guid for run: ' luser
             set -o xtrace
             $sudo_prefix docker run --rm --name tmp-run-$$ \
                         -it \
                         -p ${lport:-"5000"}:${lport:-"5000"} \
+                        --user ${luser:-"0:0"} \
                         -v ${PWD}:/tmp/${PWD##*/} \
                         --network host \
                         --workdir /tmp/${PWD##*/} \
