@@ -24,3 +24,20 @@ function fyc-get-vmid () {
 function fyc-ssh () {
     yc compute ssh   --id $(fyc-get-vmid)   --identity-file ~/.ssh/id_rsa
 }
+
+function fyc-subnet-list () {
+    yc vpc subnet list --format json | yq .[].name
+}
+
+function fyc-subnet-list-used-ip () {
+    local snet=$(fyc-subnet-list | fzf)
+    echo yc vpc subnet list-used-addresses --name $snet >&2
+    yc vpc subnet list-used-addresses --name $snet --format json | 
+    jq -c .[] | 
+    while read sss; 
+    do 
+        local ip=$(echo $sss | yq .address)
+        local ref=$(echo $sss | yq .references.[].referrer.type)
+        echo "$ip|$ref"
+    done
+}
