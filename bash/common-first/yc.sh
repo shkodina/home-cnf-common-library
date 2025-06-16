@@ -41,3 +41,35 @@ function fyc-subnet-list-used-ip () {
         echo "$ip|$ref"
     done
 }
+
+function fyc-cert-request-get-txt-records () {
+  yc resource-manager folder list --format json | 
+  jq -r .[].name | 
+  while read fldname; 
+  do 
+    yc certificate-manager certificate list \
+        --folder-name ${fldname} \
+        --format json --full | jq -c .[] | 
+    grep 'yc.lime-shop.com' | 
+    grep PENDING'' | 
+    jq -r .name |
+    while read certname;
+    do
+      yc certificate-manager certificate get \
+        --folder-name ${fldname} \
+        --name ${certname} \
+        --format json --full | 
+        jq -r .challenges |
+        jq -c .[] |
+        grep '"type":"TXT"'
+    done 
+  done |
+  while read challenge;
+  do
+    name=$(echo ${challenge} | jq -r .dns_challenge.name)
+    type=$(echo ${challenge} | jq -r .dns_challenge.type)
+    value=$(echo ${challenge} | jq -r .dns_challenge.value)
+    # echo -e "${type}|${name}|${value}"
+    echo -e "\nNAME: ${name}\nVALUE: ${value}\n"
+  done
+}
