@@ -173,8 +173,17 @@ function fgit () {
             cd "$dir"
             return ;;
   
+  #     #                                          
+#     # #    # ##### #####    ##    ####  #    # 
+#     # ##   #   #   #    #  #  #  #    # #   #  
+#     # # #  #   #   #    # #    # #      ####   
+#     # #  # #   #   #####  ###### #      #  #   
+#     # #   ##   #   #   #  #    # #    # #   #  
+ #####  #    #   #   #    # #    #  ####  #    # 
+
         "untracked" | "selector" ) git ls-files --others --exclude-standard ; return ;;
         "un" | "selector" ) $FUNCNAME  untracked ; return ;;
+        "un-add" | "selector" ) $FUNCNAME  untracked | xargs git add ; return ;;
 
  #####                              #######              
 #     # #    # ######  ####  #    # #     # #    # ##### 
