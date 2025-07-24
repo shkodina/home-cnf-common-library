@@ -39,7 +39,7 @@ alias body="tail -n +2"
       ##    ##          ##    ##    ##       ##     ##
 ##    ##    ##    ##    ##    ##    ##       ##     ##
  ######     ##     ######     ##    ######## ##     ##
-alias clock='tty-clock -s -b -x -N -C 5 '
+alias clock='tty-clock -s -b -x -n -C 5 '
 alias ll='ls -alhs --time-style="+%Y.%m.%d_%T"'
 alias l='ls -l --time-style="+%Y.%m.%d_%T"'
 alias l1='ls -1'
