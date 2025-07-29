@@ -6,6 +6,15 @@
 ##       ##     ## ##    ##
 ########  #######   ######
 
+function fglogg () {
+  local t=$(echo -e "po\ndeploy\nsts\nds" | fzf)
+  kubectl logs $(kubectl get -o name $t| fzf)
+}
+function fglogff () {
+  local t=$(echo -e "po\ndeploy\nsts\nds" | fzf)
+  kubectl logs $(kubectl get -o name $t| fzf) --follow
+}
+
 function fglog () { 
   test -z $1 \
     && kubectl logs $(fget pods) \
