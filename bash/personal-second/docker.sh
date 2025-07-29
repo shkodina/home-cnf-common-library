@@ -56,7 +56,7 @@ function fdocker () {
         "build" | "selector" ) 
             local docker_file=$(find . -iname "*dockerfile" | fzf)
             local docker_image_tmp_version="666.6.6-$(date +%N)"
-            local docker_image_tmp_tag_name="x-$(basename $(dirname ${docker_file}) | tr -d -c '[a-z][A-Z][0-9]_.-' | sed 's/^\.*//')-to-delete:${docker_image_tmp_version}"
+            local docker_image_tmp_tag_name="x-$(basename $(dirname ${docker_file} | tr "[A-Z]." "[a-z]-") | tr -d -c '[a-z][A-Z][0-9]_.-' | sed 's/^\.*//')-to-delete:${docker_image_tmp_version}"
             
             echo "$sudo_prefix docker build --network host --build-arg BUILD_VERSION=${docker_image_tmp_version} --build-arg CI_JOB_TOKEN=${LIME_SHINE_GITLAB_TOKEN_VALUE} -t $docker_image_tmp_tag_name -f $docker_file ."
             $sudo_prefix docker build --network host --build-arg BUILD_VERSION=${docker_image_tmp_version} --build-arg CI_JOB_TOKEN=${LIME_SHINE_GITLAB_TOKEN_VALUE} -t $docker_image_tmp_tag_name -f $docker_file .
