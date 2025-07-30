@@ -1579,6 +1579,12 @@ function sshtmp () {
         -o "UserKnownHostsFile /dev/null" \
             "$@"
 }
+function fssh-key-gen () {
+    local folder="/tmp/$(date '+%s')"
+    mkdir -p $folder
+    ssh-keygen -t rsa -b 1024 -N "" -f $folder/id_rsa -q
+    find $folder -type f
+}
 function f_telegram_notice_bot() {
     local x=
     local usege="Usage: $FUNCNAME  <token>  <chat_id>  <thread_id>  <message>"
