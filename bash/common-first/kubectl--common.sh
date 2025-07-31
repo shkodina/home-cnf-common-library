@@ -155,17 +155,18 @@ alias url='fkc-url'
 alias kc='kubectl '
 alias ke='kubie'
 
-alias g='kc get '
-alias gwide='kc get -owide'
-alias gname='kc get -oname'
-alias gyaml='kc get -oyaml'
+alias g='kc get --chunk-size=0'
+alias gwide='kc get -owide --chunk-size=0 '
+alias gname='kc get -oname --chunk-size=0 '
+alias gyaml='kc get -oyaml --chunk-size=0 '
+alias gjson='kc get -ojson --chunk-size=0 '
 
 alias k9s='docker run --rm -it -v ~/.kube/config:/root/.kube/config quay.io/derailed/k9s'
 
 alias grlb='kubectl get rolebindings'
 
 alias xkcd='xargs kubectl delete'
-alias xkcgy='xargs kubectl get -o yaml'
+alias xkcgy='xargs kubectl get -o yaml --chunk-size=0'
 
 ##    ## ######## ##    ## 
 ##   ##  ##       ###   ## 
