@@ -46,5 +46,9 @@ echo "install krew  ############################################################
   KREW="krew-${OS}_${ARCH}" &&
   curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" &&
   tar zxvf "${KREW}.tar.gz" &&
-  ./"${KREW}" install krew
-)
+  ./"${KREW}" install krew &&
+  echo "export PATH=${KREW_ROOT:-$HOME/.krew}/bin:$PATH" >> $HOME/.bashrc
+) && \
+kubectl krew install top && \
+kubectl krew install neat && \
+kubectl krew install tree
