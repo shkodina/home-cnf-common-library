@@ -1185,7 +1185,7 @@ function fkc-pods-with-limits () {
   local resource_lim_mem='MEM_LIM:.spec.containers[*].resources.limits.memory'
   local resource_req_cpu='CPU_REQ:.spec.containers[*].resources.requests.cpu'
   local resource_lim_cpu='CPU_LIM:.spec.containers[*].resources.limits.cpu'
-  kubectl get pod -A -o custom-columns="$ns,$pod,$container,$resource_req_mem,$resource_lim_mem,$resource_req_cpu,$resource_lim_cpu"
+  kubectl get pod --chunk-size=0 -A -o custom-columns="$ns,$pod,$container,$resource_req_mem,$resource_lim_mem,$resource_req_cpu,$resource_lim_cpu"
 }
 function fkill () {  # $1 = pod name
         local name=$1
@@ -1193,7 +1193,7 @@ function fkill () {  # $1 = pod name
                      || for pp in $* ; do kubectl delete pod --grace-period=0 --force $pp ; done
 }
 function fkc-pods-cleanup () {
-  kubectl get po -A |
+  kubectl get po --chunk-size=0 -A |
   grep -E "Completed|Unknown" |
   while read ns po xxx;
   do
