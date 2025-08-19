@@ -13,5 +13,7 @@ echo "INSTALL NET UTILS ########################################################
         fzf \
         s3cmd \
         telnet \
+        traceroute \
+        iptables-persistent \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/archives/*.deb
