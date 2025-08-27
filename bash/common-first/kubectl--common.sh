@@ -123,7 +123,7 @@ function fedit () {  # $1 = k8s source name  $2 = source name
 ##       ######## ######## 
 
 function fee () {
-	kubectl exec --stdin --tty $(fget pod) -- sh -c '(bash||sh)'
+	kubectl exec --stdin --tty $(fget pod) -- /bin/sh
 }
 
 function fee-in-container () {
@@ -135,7 +135,7 @@ function fee-in-container () {
     local cc=$1
     test -z $2 && local pp=$(fget pods) || pp=$2
   fi
-  kubectl exec --stdin --tty $pp -c $cc -- sh -c '(bash||sh)'
+  kubectl exec --stdin --tty $pp -c $cc -- /bin/sh
 }
 
 alias fee-c=fee-c
