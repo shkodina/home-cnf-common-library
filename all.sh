@@ -1260,9 +1260,9 @@ function fkc-node-ssh-to () {
 }
 function fkc-node-debug () {
     local dimages="
-    ubuntu
+    ubuntu:22.04
     nicolaka/netshoot
-    harbor.tech.mvideo.ru/mvideoru/quasar/devops/maintenance/toolbox/master/quasar-toolbox-u22-full:latest
+    harbor.shine-test-0.yc.lime-shop.com/lime-devops/base-lime-devops-toolbox-helpfull-images/main/xtoolbox-6-worker:latest
     "
     local nnode=$(kubectl get node -oname | fzf )
     local udimage=$(echo $dimages | tr ' ' '\n' | fzf)
