@@ -975,12 +975,13 @@ function fedit () {  # $1 = k8s source name  $2 = source name
 ##       ##       ##
 ##       ######## ########
 function fee () {
+  local shellname=${1:-"bash"}
   local po=$(fget pod)
   local tpo=$(mktemp)
   kubectl get po $po -o yaml > $tpo
   yq '.spec.containers[].name' $tpo | grep -q main \
-    && kubectl exec --stdin --tty $po -c main -- /bin/sh \
-    || kubectl exec --stdin --tty $po -- /bin/sh
+    && kubectl exec --stdin --tty $po -c main -- $shellname \
+    || kubectl exec --stdin --tty $po -- $shellname
 }
 function fee-in-container () {
   if [ -z $1 ]  #  no pod no container
@@ -1262,7 +1263,7 @@ function fkc-node-debug () {
     local dimages="
     ubuntu:22.04
     nicolaka/netshoot
-    harbor.shine-test-0.yc.lime-shop.com/lime-devops/base-lime-devops-toolbox-helpfull-images/main/xtoolbox-6-worker:latest
+    harbor.yc.lime-shop.com/lime-devops/base-lime-devops-toolbox-helpfull-images/main/xtoolbox-6-worker:latest
     "
     local nnode=$(kubectl get node -oname | fzf )
     local udimage=$(echo $dimages | tr ' ' '\n' | fzf)

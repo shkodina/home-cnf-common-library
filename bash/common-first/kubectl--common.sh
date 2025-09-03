@@ -123,12 +123,13 @@ function fedit () {  # $1 = k8s source name  $2 = source name
 ##       ######## ######## 
 
 function fee () {
+  local shellname=${1:-"bash"}
   local po=$(fget pod)
   local tpo=$(mktemp)
   kubectl get po $po -o yaml > $tpo
   yq '.spec.containers[].name' $tpo | grep -q main \
-    && kubectl exec --stdin --tty $po -c main -- /bin/sh \
-    || kubectl exec --stdin --tty $po -- /bin/sh 
+    && kubectl exec --stdin --tty $po -c main -- $shellname \
+    || kubectl exec --stdin --tty $po -- $shellname
 }
 
 function fee-in-container () {

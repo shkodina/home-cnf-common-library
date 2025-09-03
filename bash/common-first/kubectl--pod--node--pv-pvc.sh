@@ -100,7 +100,7 @@ function fkc-node-debug () {
     local dimages="
     ubuntu:22.04
     nicolaka/netshoot
-    harbor.shine-test-0.yc.lime-shop.com/lime-devops/base-lime-devops-toolbox-helpfull-images/main/xtoolbox-6-worker:latest
+    harbor.yc.lime-shop.com/lime-devops/base-lime-devops-toolbox-helpfull-images/main/xtoolbox-6-worker:latest
     "
     local nnode=$(kubectl get node -oname | fzf )
     local udimage=$(echo $dimages | tr ' ' '\n' | fzf)
