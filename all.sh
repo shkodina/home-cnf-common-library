@@ -122,6 +122,19 @@ function avesd-from-file-by-key () {
     yq -r "$2" $1 > $tmp_all
     ansible-vault decrypt $tmp_all && cat $tmp_all && rm $tmp_all
 }
+function avef () {
+    local f=${1:?"Error: set up file name"}
+    ansible-vault encrypt $f
+}
+function avefd () {
+    local f=${1:?"Error: set up file name"}
+    ansible-vault decrypt $f
+}
+function avefd-console () {
+    local f=${1:?"Error: set up file name"}
+    ansible-vault decrypt $f --output -
+}
+alias avefdc="avefd-console"
 function fbanner0 () { echo -e "import art\nart.tprint('$@', font='banner')" | python ; }
 function fbanner () { echo -e "import art\nart.tprint('$@', font='banner3')" | python ; }
 # check init.scripts/vars/aliases.sh cert block

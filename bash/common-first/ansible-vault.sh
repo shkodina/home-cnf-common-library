@@ -43,3 +43,20 @@ function avesd-from-file-by-key () {
 
     ansible-vault decrypt $tmp_all && cat $tmp_all && rm $tmp_all
 }
+
+function avef () {
+    local f=${1:?"Error: set up file name"}
+    ansible-vault encrypt $f
+}
+
+function avefd () {
+    local f=${1:?"Error: set up file name"}
+    ansible-vault decrypt $f
+}
+function avefd-console () {
+    local f=${1:?"Error: set up file name"}
+    ansible-vault decrypt $f --output -
+}
+alias avefdc="avefd-console"
+
+
