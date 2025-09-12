@@ -1140,7 +1140,21 @@ function fkc-rollout-statefulset () {
     kubectl  rollout restart statefulset $d
   done
 }
-function switch_kubie_ctx_ns () {
+########   ######
+##     ## ##    ##
+##     ## ##
+##     ##  ######
+##     ##       ##
+##     ## ##    ##
+########   ######
+function fkc-rollout-daemonset () {
+  test -z "$1" &&  { kubectl  rollout restart statefulset $(fget ds) && return ; }
+  for d in $@
+  do
+    echo "$d" | grep -q 'daemonset.apps' && d=$(echo $d | cut -d'/' -f2)
+    kubectl  rollout restart ds $d
+  done
+}function switch_kubie_ctx_ns () {
     echo kubie ctx -n $2 $1
     kubie ctx -n $2 $1
 }
