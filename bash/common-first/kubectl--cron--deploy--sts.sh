@@ -105,7 +105,7 @@ function fkc-rollout-statefulset () {
 ########   ######  
 
 function fkc-rollout-daemonset () {
-  test -z "$1" &&  { kubectl  rollout restart statefulset $(fget ds) && return ; }
+  test -z "$1" &&  { kubectl  rollout restart ds $(fget ds) && return ; }
   for d in $@
   do
     echo "$d" | grep -q 'daemonset.apps' && d=$(echo $d | cut -d'/' -f2)
