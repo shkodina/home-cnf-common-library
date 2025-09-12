@@ -63,3 +63,17 @@ echo "INSTALL POSTGRES #########################################################
     && apt install -y postgresql-client-16 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/archives/*.deb
+
+##     ## #### ##    ## ####  #######  
+###   ###  ##  ###   ##  ##  ##     ## 
+#### ####  ##  ####  ##  ##  ##     ## 
+## ### ##  ##  ## ## ##  ##  ##     ## 
+##     ##  ##  ##  ####  ##  ##     ## 
+##     ##  ##  ##   ###  ##  ##     ## 
+##     ## #### ##    ## ####  #######
+
+wget 
+
+echo "install mc minio  ##################################################################################" \
+    && wget -qO /usr/local/bin/mc https://dl.min.io/client/mc/release/linux-amd64/mc \
+    && chmod a+x /usr/local/bin/mc
