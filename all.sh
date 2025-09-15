@@ -20,16 +20,15 @@ export CLR_NC='\033[0m' # No Color
 ##    ##  ##          ##            ##        ##  ##       ##       ##     ##       ##
 ##    ##  ##          ##            ##        ##  ##       ##       ##     ## ##    ##
  ######   ########    ##            ##       #### ######## ######## ########   ######
-alias first='while read x1 last; do echo "$x1"; done'
-alias f1='first'
-alias second='while read x1 x2 last; do echo "$x2"; done'
-alias f2='second'
-alias third='while read x1 x2 x3 last; do echo "$x3"; done'
-alias f3='third'
-alias forth='while read x1 x2 x3 x4 last; do echo "$x4"; done'
-alias f4='forth'
-alias fifth='while read x1 x2 x3 x4 x5 last; do echo "$x5"; done'
-alias f5='fifth'
+alias f1='while read x1 last; do echo "$x1"; done'
+alias f2='while read x1 x2 last; do echo "$x2"; done'
+alias f3='while read x1 x2 x3 last; do echo "$x3"; done'
+alias f4='while read x1 x2 x3 x4 last; do echo "$x4"; done'
+alias f5='while read x1 x2 x3 x4 x5 last; do echo "$x5"; done'
+alias f6='while read x1 x2 x3 x4 x5 x6 last; do echo "$x6"; done'
+alias f7='while read x1 x2 x3 x4 x5 x6 x7 last; do echo "$x7"; done'
+alias f8='while read x1 x2 x3 x4 x5 x6 x7 x8 last; do echo "$x8"; done'
+alias f9='while read x1 x2 x3 x4 x5 x6 x7 x8 x9 last; do echo "$x9"; done'
 alias body="tail -n +2"
 # function ak() { awk "{print \$${1:-1}}"; }
  ######  ##    ##  ######  ######## ######## ##     ##
