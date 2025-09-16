@@ -1153,7 +1153,8 @@ function fkc-rollout-daemonset () {
     echo "$d" | grep -q 'daemonset.apps' && d=$(echo $d | cut -d'/' -f2)
     kubectl  rollout restart ds $d
   done
-}function switch_kubie_ctx_ns () {
+}
+function switch_kubie_ctx_ns () {
     echo kubie ctx -n $2 $1
     kubie ctx -n $2 $1
 }
