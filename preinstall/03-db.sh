@@ -60,7 +60,7 @@ echo "INSTALL POSTGRES #########################################################
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg \
     && apt update \
-    && apt install -y postgresql-client-16 \
+    && DEBIAN_FRONTEND=noninteractive apt install -y postgresql-client-16 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/archives/*.deb
 

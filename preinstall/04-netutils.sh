@@ -3,7 +3,7 @@
 echo "INSTALL NET UTILS ####################################################################" \
     && apt update \
     && apt upgrade -y \
-    && apt install -y \
+    && DEBIAN_FRONTEND=noninteractive apt install -y \
         dnsutils \
         net-tools \
         iputils-ping \
