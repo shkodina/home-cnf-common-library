@@ -15,6 +15,7 @@ echo "apt install ##############################################################
         vim \
         git \
         netcat-openbsd \
+        direnv \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/archives/*.deb 
 
