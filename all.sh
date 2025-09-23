@@ -604,6 +604,13 @@ function fgit () {
                 git -C ${d%/*}/ pull;
               done
             return ;;
+        "pull-all-in-daemon" | "selector" )
+            find . -type d -name ".git" | while read d;
+              do
+                f_log_info "$d";
+                git -C ${d%/*}/ pull &;
+              done
+            return ;;
         * )
             >&2 echo "wrong command:   $cmd"
             >&2 echo "available commands are:"

@@ -248,6 +248,13 @@ function fgit () {
               done
             return ;;
 
+        "pull-all-in-daemon" | "selector" )
+            find . -type d -name ".git" | while read d; 
+              do 
+                f_log_info "$d";
+                git -C ${d%/*}/ pull &; 
+              done
+            return ;;
 
 
         * ) 
