@@ -609,7 +609,7 @@ function fgit () {
             find . -type d -name ".git" | while read d;
               do
                 f_log_info "$d";
-                git -C ${d%/*}/ pull &;
+                git -C ${d%/*}/ pull &
               done
             return ;;
         * )
