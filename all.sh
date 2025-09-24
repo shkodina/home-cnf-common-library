@@ -1023,8 +1023,7 @@ alias fee-c=fee-c
 ##     ## ##        ##  ##     ## ##    ## ##       ##    ##
 ##     ## ######## #### ##     ##  ######  ########  ######
 alias fkc-kill='fkill'
-alias fkc-url='tail -n +2 | grep -o -E "nginx.* +" | while read ss uri tt; do for iii in $(echo $uri | tr "," "\ "); do printf "%-60s %s\n" $ii https://$iii ; done ; done'
-alias url='fkc-url'
+alias url='tail -n +2 | grep -o -E "nginx.* +" | while read ss uri tt; do for iii in $(echo $uri | tr "," "\ "); do printf "%-60s %s\n" $ii https://$iii ; done ; done'
 alias kc='kubectl '
 alias ke='kubie'
 alias g='kc get --chunk-size=0'
