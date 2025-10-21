@@ -308,3 +308,6 @@ function f_lib_generate_version () {
     export VERSION=$VERSION
     # echo VERSION="${VERSION}" > $CI_PROJECT_DIR/variables.env
 }
+
+alias fgs='git status -s'
+
