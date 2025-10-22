@@ -651,6 +651,7 @@ function f_lib_generate_version () {
     export VERSION=$VERSION
     # echo VERSION="${VERSION}" > $CI_PROJECT_DIR/variables.env
 }
+alias fgs='git status -s'
 command -v helm  &>/dev/null && complete -o default -F __start_helm helm
 command -v helm  &>/dev/null && source <(helm completion bash)
 function fhelm-roll-back-chart-by-grep-from-history () {
