@@ -1302,7 +1302,7 @@ function fkc-node-debug () {
     "
     local nnode=$(kubectl get node -oname | fzf )
     local udimage=$(echo $dimages | tr ' ' '\n' | fzf)
-    kubectl debug $nnode -it --image=$udimage
+    kubectl debug $nnode -it --image=$udimage --profile=sysadmin
     kubectl get po -oname | grep node-debugger | grep ${nnode//node\/} | xargs kubectl delete
 }
 function fkc-node-cordone () { kubectl cordon $(fget node) ; }
