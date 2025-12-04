@@ -73,3 +73,47 @@ function fyc-cert-request-get-txt-records () {
     echo -e "\nNAME: ${name}\nVALUE: ${value}\n"
   done
 }
+
+function fyc-vm () {
+    type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | wc -l | xargs test 1 -eq \
+        && local cmd=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" ) \
+        || local cmd=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | fzf )
+
+    case $cmd in
+        "list" | "selector" ) 
+            yc compute instance list
+        return ;; 
+
+        "get" | "selector" ) 
+            local vmname=$(yc compute instance list | grep central | fzf | cut -d'|' -f3 | tr -d ' ')
+            yc compute instance get --name $vmname --format json
+        return ;; 
+
+        "up" | "start" | "selector" ) 
+            local vmname=$(yc compute instance list | grep STOPPED | fzf | cut -d'|' -f3 | tr -d ' ')
+            yc compute instance start --name $vmname
+        return ;; 
+
+        "down" | "stop" | "selector" ) 
+            local vmname=$(yc compute instance list | grep RUNNING | fzf | cut -d'|' -f3 | tr -d ' ')
+            yc compute instance stop --name $vmname
+        return ;; 
+
+        "delete" | "rm" | "selector" ) 
+            local vmname=$(yc compute instance list | grep central | fzf | cut -d'|' -f3 | tr -d ' ')
+            yc compute instance delete --name $vmname
+        return ;; 
+
+        "operations" | "selector" ) 
+            local vmname=$(yc compute instance list | grep central | fzf | cut -d'|' -f3 | tr -d ' ')
+            yc compute instance list-operations --name $vmname
+        return ;; 
+
+        * ) 
+            >&2 echo "wrong command:   $cmd"
+            >&2 echo "available commands are:"
+            type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2
+            return
+        ;;
+    esac
+}
