@@ -64,25 +64,28 @@ function fgetsecretdata () {
 
 
 function fgetsecretdata-from-tls () {
+  local tmp=$(mktemp)
   kubectl get secrets | 
     grep kubernetes.io/tls | 
       while read n stub; do echo $n; done | 
         fzf | 
           xargs kubectl get secret -oyaml | 
-            yq '.data."tls.crt"' | 
-              base64 -d | 
-                openssl x509 -noout -text
+            yq '.data."tls.crt"' |
+              base64 -d > $tmp # | openssl x509 -noout -text -print_certs
+  openssl crl2pkcs7 -nocrl -certfile $tmp |
+    openssl pkcs7 -print_certs -text -noout
+                
 }
 
 function fget-external-secrets () {
 cat << EOF
-  kubectl get  secretstore.external-secrets.io
-  kubectl get  clustersecretstore.external-secrets.io
-  kubectl get  externalsecret.external-secrets.io
+kubectl get  secretstore.external-secrets.io
+kubectl get  clustersecretstore.external-secrets.io
+kubectl get  externalsecret.external-secrets.io
 
-  fgy  secretstore.external-secrets.io
-  fgy  clustersecretstore.external-secrets.io
-  fgy  externalsecret.external-secrets.io
+fgy  secretstore.external-secrets.io
+fgy  clustersecretstore.external-secrets.io
+fgy  externalsecret.external-secrets.io
 EOF
 }
 # alias  es=externalsecret.external-secrets.io

@@ -222,8 +222,10 @@ function fgit () {
             git checkout $br
             git pull
             git checkout $cbr
-            git merge $br
-
+            echo "принять все входящие изменения или разрезолвить конфликты?"
+            local if_merge_accept_all_incoming=$(echo -e "accept_all\nresolve_local" | fzf)
+            test "$if_merge_accept_all_incoming" == "resolve_local" && git merge $br
+            test "$if_merge_accept_all_incoming" == "accept_all" && git merge --squash -X theirs $br 
             return ;;
 
 ######                       
