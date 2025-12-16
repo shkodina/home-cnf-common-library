@@ -1223,6 +1223,8 @@ alias fkc-kill-ns=fkc-ns-kill
 ##        ##     ## ##     ##       ##
 ##        ##     ## ##     ## ##    ##
 ##         #######  ########   ######
+alias fkc-kill-wide-alias='while read n p x ; do kubectl delete -n $n po $p --grace-period=0 --force; done'
+alias fkc-delete-po-wide-alias='while read n p x ; do kubectl delete -n $n po $p; done'
 function fkc-pods-with-limits () {
   local ns='NAMESPACE:.metadata.namespace'
   local pod="POD:.metadata.name"
