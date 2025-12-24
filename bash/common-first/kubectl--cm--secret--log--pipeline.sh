@@ -64,17 +64,19 @@ function fgetsecretdata () {
 
 
 function fgetsecretdata-from-tls () {
-  local tmp=$(mktemp)
+  # local tmp=$(mktemp)
   kubectl get secrets | 
-    grep kubernetes.io/tls | 
+    grep tls | 
       while read n stub; do echo $n; done | 
         fzf | 
           xargs kubectl get secret -oyaml | 
             yq '.data."tls.crt"' |
-              base64 -d > $tmp # | openssl x509 -noout -text -print_certs
-  openssl crl2pkcs7 -nocrl -certfile $tmp |
-    openssl pkcs7 -print_certs -text -noout
-                
+              base64 -d |
+                while openssl x509 -noout -text; do echo ; done
+
+  #             base64 -d > $tmp 
+  # openssl crl2pkcs7 -nocrl -certfile $tmp |
+  #   openssl pkcs7 -print_certs -text -noout
 }
 
 function fget-external-secrets () {

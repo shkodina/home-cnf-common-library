@@ -82,12 +82,6 @@ function fssl-create-cert-mtls() {
     echo "В кодах ответа не должно быть 302 и рикрола"
 }
 
-
-function fssl-list-all-certs () {
-    awk -v cmd='openssl x509 -noout -subject' '/BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
-}
-
-
 function fssl () {
     local cmd=$1
     test "$cmd" == "" && cmd=$(type $FUNCNAME | grep selector | grep -v grep | sort | cut -d'"' -f2 | fzf)
@@ -99,7 +93,13 @@ function fssl () {
             return
         ;;
 
-
+        "cert-show-all-inside" | "selector" ) 
+            read -p 'path to cert: ' lcert
+            cat "$lcert" | 
+                while openssl x509 -noout -text; 
+                do echo ; done
+            return
+        ;;
 
         "encrypt-str" | "selector" ) 
             local lstr=$2
@@ -183,7 +183,12 @@ function fssl () {
         "mtex" | "selector" ) flib-openssl ; return ;;
         "pipelines" | "selector" ) flib-openssl ; return ;;
 
-        "list-all-certs" | "selector" ) fssl-list-all-certs ; return ;;
+
+
+        "list-all-certs" | "selector" ) 
+            awk -v cmd='openssl x509 -noout -subject' '/BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
+            return 
+        ;;
        
         * ) 
             >&2 echo "wrong command:   $cmd"

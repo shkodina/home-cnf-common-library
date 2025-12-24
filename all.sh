@@ -199,9 +199,6 @@ function fssl-create-cert-mtls() {
     echo "curl -v --cert $CERT_FILE --key $KEY_FILE https://example.com"
     echo "В кодах ответа не должно быть 302 и рикрола"
 }
-function fssl-list-all-certs () {
-    awk -v cmd='openssl x509 -noout -subject' '/BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
-}
 function fssl () {
     local cmd=$1
     test "$cmd" == "" && cmd=$(type $FUNCNAME | grep selector | grep -v grep | sort | cut -d'"' -f2 | fzf)
@@ -209,6 +206,13 @@ function fssl () {
         "cert-show" | "selector" )
             read -p 'path to cert: ' lcert
             openssl x509 -noout -text -in "$lcert"
+            return
+        ;;
+        "cert-show-all-inside" | "selector" )
+            read -p 'path to cert: ' lcert
+            cat "$lcert" |
+                while openssl x509 -noout -text;
+                do echo ; done
             return
         ;;
         "encrypt-str" | "selector" )
@@ -278,7 +282,10 @@ function fssl () {
         "ansible" | "selector" ) flib-openssl ; return ;;
         "mtex" | "selector" ) flib-openssl ; return ;;
         "pipelines" | "selector" ) flib-openssl ; return ;;
-        "list-all-certs" | "selector" ) fssl-list-all-certs ; return ;;
+        "list-all-certs" | "selector" )
+            awk -v cmd='openssl x509 -noout -subject' '/BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
+            return
+        ;;
         * )
             >&2 echo "wrong command:   $cmd"
             >&2 echo "available commands are:"
@@ -841,16 +848,18 @@ function fgetsecretdata () {
           while read k v; do echo $k $(echo $v | base64 -d); done
 }
 function fgetsecretdata-from-tls () {
-  local tmp=$(mktemp)
+  # local tmp=$(mktemp)
   kubectl get secrets |
-    grep kubernetes.io/tls |
+    grep tls |
       while read n stub; do echo $n; done |
         fzf |
           xargs kubectl get secret -oyaml |
             yq '.data."tls.crt"' |
-              base64 -d > $tmp # | openssl x509 -noout -text -print_certs
-  openssl crl2pkcs7 -nocrl -certfile $tmp |
-    openssl pkcs7 -print_certs -text -noout
+              base64 -d |
+                while openssl x509 -noout -text; do echo ; done
+  #             base64 -d > $tmp
+  # openssl crl2pkcs7 -nocrl -certfile $tmp |
+  #   openssl pkcs7 -print_certs -text -noout
 }
 function fget-external-secrets () {
 cat << EOF
