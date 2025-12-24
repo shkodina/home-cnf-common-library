@@ -1764,37 +1764,46 @@ function fyc-cert-request-get-txt-records () {
   done
 }
 function fyc-vm () {
-    type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | wc -l | xargs test 1 -eq \
-        && local cmd=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" ) \
-        || local cmd=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | fzf )
+    local cmdls=$(mktemp); type $FUNCNAME | grep '"local-in-case-cmd-selector"' | grep -v grep | tr \" \\n | grep -v -E "\||\)|local-in-case-cmd-selector|^ *$" | grep -E ".*$1.*" > $cmdls
+    local cmdc=$( cat $cmdls | wc -l )
+    local cmd=
+    [ $cmdc -lt 1 ] && cmd=
+    [ $cmdc -eq 1 ] && cmd=$( cat $cmdls )
+    [ $cmdc -gt 1 ] && cmd=$( cat $cmdls | fzf )
     case $cmd in
-        "list" | "selector" )
+        "list" | "local-in-case-cmd-selector" )
             yc compute instance list
         return ;;
-        "get" | "selector" )
+        "get" | "local-in-case-cmd-selector" )
             local vmname=$(yc compute instance list | grep central | fzf | cut -d'|' -f3 | tr -d ' ')
             yc compute instance get --name $vmname --format json
         return ;;
-        "up" | "start" | "selector" )
+        "up" | "start" | "local-in-case-cmd-selector" )
             local vmname=$(yc compute instance list | grep STOPPED | fzf | cut -d'|' -f3 | tr -d ' ')
             yc compute instance start --name $vmname
         return ;;
-        "down" | "stop" | "selector" )
+        "down" | "stop" | "local-in-case-cmd-selector" )
             local vmname=$(yc compute instance list | grep RUNNING | fzf | cut -d'|' -f3 | tr -d ' ')
             yc compute instance stop --name $vmname
         return ;;
-        "delete" | "rm" | "selector" )
+        "delete" | "rm" | "local-in-case-cmd-selector" )
             local vmname=$(yc compute instance list | grep central | fzf | cut -d'|' -f3 | tr -d ' ')
             yc compute instance delete --name $vmname
         return ;;
-        "operations" | "selector" )
+        "operations" | "local-in-case-cmd-selector" )
             local vmname=$(yc compute instance list | grep central | fzf | cut -d'|' -f3 | tr -d ' ')
             yc compute instance list-operations --name $vmname
+        return ;;
+        "ssh" | "connect" | "local-in-case-cmd-selector" )
+            local vmname=$(yc compute instance list | grep central | fzf | cut -d'|' -f3 | tr -d ' ')
+            local primary_v4_address=$(yc compute instance get --name $vmname --format json | jq -r .network_interfaces[].primary_v4_address.address | grep 10.198)
+            >&2 echo "ssh $primary_v4_address"
+            ssh $primary_v4_address
         return ;;
         * )
             >&2 echo "wrong command:   $cmd"
             >&2 echo "available commands are:"
-            type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2
+            type $FUNCNAME | grep local-in-case-cmd-selector | grep -v grep | cut -d'"' -f2
             return
         ;;
     esac
