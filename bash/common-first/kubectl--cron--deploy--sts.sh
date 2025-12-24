@@ -39,7 +39,7 @@ function fcj () {
 
 
 function fscale_replica_deployment () {
-        local src_count=${1:?"Error. You must supply new count in FIRST parameter."}
+        local src_count=${1:?"Error from $FUNCNAME. You must supply new count in FIRST parameter."}
 
         local src_count=$1
 

@@ -9,7 +9,7 @@
 alias fkc-kill-wide-alias='while read n p x ; do kubectl delete -n $n po $p --grace-period=0 --force; done'
 alias fkc-delete-po-wide-alias='while read n p x ; do kubectl delete -n $n po $p; done'
 
-function fkc-pods-with-limits () {
+function fkc-pod-limits () {
   
   local ns='NAMESPACE:.metadata.namespace'
   local pod="POD:.metadata.name"
@@ -28,7 +28,7 @@ function fkill () {  # $1 = pod name
                      || for pp in $* ; do kubectl delete pod --grace-period=0 --force $pp ; done
 }
 
-function fkc-pods-cleanup () {
+function fkc-pod-cleanup () {
   kubectl get po --chunk-size=0 -A | 
   grep -E "Completed|Unknown" | 
   while read ns po xxx; 
@@ -42,7 +42,7 @@ function fkc-cp-to-pod () {
   kubectl cp $1 $(kubectl get po -oname | cut -d'/' -f2 | fzf):$1
 }
 
-function fkc-pods-port-proxy () {
+function fkc-pod-port-proxy () {
   local pod=$(kubectl get po -oname | fzf)
   read -p 'set POD port: ' podport
   read -p 'set local port: ' lport
@@ -72,7 +72,7 @@ function fkc-pod-debug () {
 ##   ### ##     ## ##     ## ##       ##    ## 
 ##    ##  #######  ########  ########  ######
 
-function fkc-nodes-non-terminated-pods () {
+function fkc-node-show-non-term-pods () {
   local maxl=$(for n in $(kc get no -oname); do echo $n | wc -c; done | sort -u | tail -n 1)
   printf "%-${maxl}s %-15s %s\n" NodeName PodCapacity PodNoneTerminatedState
   for n in $(kubectl get no -oname)
@@ -86,7 +86,7 @@ function fkc-nodes-non-terminated-pods () {
 }
 
 
-function fkc-node-ssh-to () {
+function fkc-node-ssh () {
   # local fuser="piper_al"
   test -z $KUBIE_ACTIVE && echo "NO KUBIE. EXIT"
   test -z $KUBIE_ACTIVE && return
@@ -151,13 +151,13 @@ function fkc-node-shell () {
 ##          ## ##            ##          ## ##   ##    ## 
 ##           ###             ##           ###     ###### 
 
-function fkc-pv-force-delete () {
+function fkc-pv-kill () {
   test "$1" == "" && kubectl patch pv $(kubectl get pv | grep Terminating | fzf | cut -d' ' -f1) -p '{"metadata": {"finalizers": null}}'
   test "$1" == "" || kubectl patch pv "$1" -p '{"metadata": {"finalizers": null}}'
 }
 
 
-function fkc-pvc-force-delete () {
+function fkc-pvc-kill () {
   test "$1" == "" && kubectl patch pvc $(kubectl get pvc | grep Terminating | fzf | cut -d' ' -f1) -p '{"metadata": {"finalizers": null}}'
   test "$1" == "" || kubectl patch pvc "$1" -p '{"metadata": {"finalizers": null}}'
 }

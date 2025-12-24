@@ -740,49 +740,57 @@ alias fu=futils##     ## ######## ##       ########  ######## ########
 ##     ## ##       ##       ##        ##       ##   ##
 ##     ## ##       ##       ##        ##       ##    ##
 ##     ## ######## ######## ##        ######## ##     ##
-function fk () {
-    local cmd=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | fzf )
+function fkc () {
+    local cmdc=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | wc -l )
+    local cmd=
+    [ $cmdc -lt 1 ] && cmd=
+    [ $cmdc -eq 1 ] && cmd=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" )
+    [ $cmdc -gt 1 ] && cmd=$( type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | grep -E ".*$1.*" | fzf )
     case $cmd in
-        "get" | "selector" ) fget ; return ;;
-        "node-debug" | "selector" ) fkc-node-debug ; return ;;
-        "node-ssh" | "selector" ) fkc-node-ssh-to ; return ;;
-        "node-show-non-term-pods" | "selector" ) fkc-nodes-non-terminated-pods ; return ;;
-        "node-cordone" | "selector" ) fkc-node-cordone ; return ;;
-        "node-uncordone" | "selector" ) fkc-node-uncordone ; return ;;
-        "node-drain" | "selector" ) fkc-node-drain ; return ;;
-        "node-shell" | "selector" ) fkc-node-shell ; return ;;
-        "pod-limits" | "selector" ) fkc-pods-with-limits ; return ;;
-        "pod-kill" | "selector" ) fkill ; return ;;
-        "pod-cleanup" | "selector" ) fkc-pods-cleanup ; return ;;
-        "pod-port-proxy" | "selector" ) fkc-pods-port-proxy ; return ;;
-        "pv-kill" | "selector" ) fkc-pv-force-delete ; return ;;
-        "pvc-kill" | "selector" ) fkc-pvc-force-delete ; return ;;
-        "pvc-delete-cascade" | "selector" ) fkc-pvc-full-delete ; return ;;
+        "node-debug"              | "selector" ) fkc-$cmd ; return ;;
+        "node-ssh"                | "selector" ) fkc-$cmd ; return ;;
+        "node-show-non-term-pods" | "selector" ) fkc-$cmd ; return ;;
+        "node-cordone"            | "selector" ) fkc-$cmd ; return ;;
+        "node-uncordone"          | "selector" ) fkc-$cmd ; return ;;
+        "node-drain"              | "selector" ) fkc-$cmd ; return ;;
+        "node-shell"              | "selector" ) fkc-$cmd ; return ;;
+        "pod-limits"     | "selector" ) fkc-$cmd ; return ;;
+        "pod-kill"       | "selector" ) fkill    ; return ;;
+        "pod-cleanup"    | "selector" ) fkc-$cmd ; return ;;
+        "pod-debug"      | "selector" ) fkc-$cmd ; return ;;
+        "pod-port-proxy" | "selector" ) fkc-$cmd ; return ;;
+        "pv-kill"         | "selector" ) fkc-$cmd ; return ;;
+        "pvc-kill"        | "selector" ) fkc-$cmd ; return ;;
+        "pvc-full-delete" | "selector" ) fkc-$cmd ; return ;;
         "cron" | "selector" ) fcj ; return ;;
         "scale-deploy" | "selector" )
-            read -p 'set new count: ' ccout ;
-            fscale_replica_deployment $ccount ;
+            [ -z "$2" ] && {
+                read -p 'set new count: ' ccount
+                fscale_replica_deployment $ccount
+            } || fscale_replica_deployment $2
             return
         ;;
         "scale-sts" | "selector" )
-            read -p 'set new count: ' ccout ;
-            fscale_replica_sts_statefullset $ccount ;
+            [ -z "$2" ] && {
+                read -p 'set new count: ' ccount
+                fscale_replica_sts_statefullset $ccount
+            } || fscale_replica_sts_statefullset $2
             return
         ;;
         "ctx-list" | "selector" )
           >&2 echo "kubectl config get-contexts -o name"
           kubectl config get-contexts -o name ;
           return ;;
-        "ctx" | "selector" ) kubectl config view --minify -o jsonpath='{.current-context}' ; return ;;
-        "ns" | "selector" ) kubectl config view --minify -o jsonpath='{..namespace}' ; return ;;
-        "ns-kill" | "selector" ) fkc-ns-kill ; return ;;
-        "svc-kill" | "selector" ) fkc-svc-kill ; return ;;
-        "rollout-deploy" | "selector" ) fkc-rollout-deploy ; return ;;
-        "rollout-sts" | "selector" ) fkc-rollout-statefulset ; return ;;
+        "ctx"      | "selector" ) kubectl config view --minify -o jsonpath='{.current-context}' ; return ;;
+        "ns"       | "selector" ) kubectl config view --minify -o jsonpath='{..namespace}' ; return ;;
+        "ns-kill"  | "selector" ) fkc-$cmd ; return ;;
+        "svc-kill" | "selector" ) fkc-$cmd ; return ;;
+        "rollout-deploy"      | "selector" ) fkc-$cmd ; return ;;
+        "rollout-statefulset" | "selector" ) fkc-$cmd ; return ;;
         "secret-data" | "selector" ) fgetsecretdata ; return ;;
-        "secret-tls" | "selector" ) fgetsecretdata-from-tls ; return ;;
-        "info" | "selector" ) fginfo ; return ;;
-        "info-full" | "selector" ) fginfo-full ; return ;;
+        "secret-tls"  | "selector" ) fgetsecretdata-from-tls ; return ;;
+        "info"        | "selector" ) fginfo ; return ;;
+        "info-full"   | "selector" ) fginfo-full ; return ;;
         "token-review" | "selector" ) echo "call: fkc-token-review  <token>" ; return ;;
         * )
             >&2 echo "wrong command:   $cmd"
@@ -792,7 +800,6 @@ function fk () {
         ;;
     esac
 }
-alias fkc=fk
 ##        #######   ######
 ##       ##     ## ##    ##
 ##       ##     ## ##
@@ -848,18 +855,6 @@ function fgetsecretdata () {
           while read k v; do echo $k $(echo $v | base64 -d); done
 }
 function fgetsecretdata-from-tls () {
-  # local tmp=$(mktemp)
-  kubectl get secrets |
-    grep tls |
-      while read n stub; do echo $n; done |
-        fzf |
-          xargs kubectl get secret -oyaml |
-            yq '.data."tls.crt"' |
-              base64 -d |
-                while openssl x509 -noout -text; do echo ; done
-  #             base64 -d > $tmp
-  # openssl crl2pkcs7 -nocrl -certfile $tmp |
-  #   openssl pkcs7 -print_certs -text -noout
 }
 function fget-external-secrets () {
 cat << EOF
@@ -1118,7 +1113,7 @@ function fcj () {
 ##     ## ##       ##        ##       ##     ##    ##
 ########  ######## ##        ########  #######     ##
 function fscale_replica_deployment () {
-        local src_count=${1:?"Error. You must supply new count in FIRST parameter."}
+        local src_count=${1:?"Error from $FUNCNAME. You must supply new count in FIRST parameter."}
         local src_count=$1
         local src_name=$2
         test -z $src_name && src_name=$(kubectl get deploy | tail -n +2 | fzf -m | cut -d' ' -f1) || { shift; src_name=$@ ;}
@@ -1234,7 +1229,7 @@ alias fkc-kill-ns=fkc-ns-kill
 ##         #######  ########   ######
 alias fkc-kill-wide-alias='while read n p x ; do kubectl delete -n $n po $p --grace-period=0 --force; done'
 alias fkc-delete-po-wide-alias='while read n p x ; do kubectl delete -n $n po $p; done'
-function fkc-pods-with-limits () {
+function fkc-pod-limits () {
   local ns='NAMESPACE:.metadata.namespace'
   local pod="POD:.metadata.name"
   local container='CONTAINER:.spec.containers[*].name'
@@ -1249,7 +1244,7 @@ function fkill () {  # $1 = pod name
         [ -z $name ] && { name=$(kubectl get pods | tail -n +2 | fzf -m | f1) ;  kubectl delete pod --grace-period=0 --force $name ; } \
                      || for pp in $* ; do kubectl delete pod --grace-period=0 --force $pp ; done
 }
-function fkc-pods-cleanup () {
+function fkc-pod-cleanup () {
   kubectl get po --chunk-size=0 -A |
   grep -E "Completed|Unknown" |
   while read ns po xxx;
@@ -1261,7 +1256,7 @@ function fkc-cp-to-pod () {
   local x=${1:?"Error. You must supply full path to file for copy"}
   kubectl cp $1 $(kubectl get po -oname | cut -d'/' -f2 | fzf):$1
 }
-function fkc-pods-port-proxy () {
+function fkc-pod-port-proxy () {
   local pod=$(kubectl get po -oname | fzf)
   read -p 'set POD port: ' podport
   read -p 'set local port: ' lport
@@ -1287,7 +1282,7 @@ function fkc-pod-debug () {
 ##  #### ##     ## ##     ## ##             ##
 ##   ### ##     ## ##     ## ##       ##    ##
 ##    ##  #######  ########  ########  ######
-function fkc-nodes-non-terminated-pods () {
+function fkc-node-show-non-term-pods () {
   local maxl=$(for n in $(kc get no -oname); do echo $n | wc -c; done | sort -u | tail -n 1)
   printf "%-${maxl}s %-15s %s\n" NodeName PodCapacity PodNoneTerminatedState
   for n in $(kubectl get no -oname)
@@ -1299,7 +1294,7 @@ function fkc-nodes-non-terminated-pods () {
     printf "%-${maxl}s %-15s %s\n" $nname $ncpod $nwpod
   done
 }
-function fkc-node-ssh-to () {
+function fkc-node-ssh () {
   # local fuser="piper_al"
   test -z $KUBIE_ACTIVE && echo "NO KUBIE. EXIT"
   test -z $KUBIE_ACTIVE && return
@@ -1355,11 +1350,11 @@ function fkc-node-shell () {
 ##         ##   ##           ##         ##   ##  ##
 ##          ## ##            ##          ## ##   ##    ##
 ##           ###             ##           ###     ######
-function fkc-pv-force-delete () {
+function fkc-pv-kill () {
   test "$1" == "" && kubectl patch pv $(kubectl get pv | grep Terminating | fzf | cut -d' ' -f1) -p '{"metadata": {"finalizers": null}}'
   test "$1" == "" || kubectl patch pv "$1" -p '{"metadata": {"finalizers": null}}'
 }
-function fkc-pvc-force-delete () {
+function fkc-pvc-kill () {
   test "$1" == "" && kubectl patch pvc $(kubectl get pvc | grep Terminating | fzf | cut -d' ' -f1) -p '{"metadata": {"finalizers": null}}'
   test "$1" == "" || kubectl patch pvc "$1" -p '{"metadata": {"finalizers": null}}'
 }
