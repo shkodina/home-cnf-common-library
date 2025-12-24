@@ -62,6 +62,23 @@ function fgetsecretdata () {
           while read k v; do echo $k $(echo $v | base64 -d); done        
 }
 
+
+function fgetsecretdata-from-tls () {
+  # local tmp=$(mktemp)
+  kubectl get secrets | 
+    grep tls | 
+      while read n stub; do echo $n; done | 
+        fzf | 
+          xargs kubectl get secret -oyaml | 
+            yq '.data."tls.crt"' |
+              base64 -d |
+                while openssl x509 -noout -text; do echo ; done
+
+  #             base64 -d > $tmp 
+  # openssl crl2pkcs7 -nocrl -certfile $tmp |
+  #   openssl pkcs7 -print_certs -text -noout
+}
+
 function fget-external-secrets () {
 cat << EOF
 kubectl get  secretstore.external-secrets.io
