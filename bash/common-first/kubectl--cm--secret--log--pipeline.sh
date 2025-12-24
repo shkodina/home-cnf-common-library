@@ -62,10 +62,6 @@ function fgetsecretdata () {
           while read k v; do echo $k $(echo $v | base64 -d); done        
 }
 
-
-function fgetsecretdata-from-tls () {
-}
-
 function fget-external-secrets () {
 cat << EOF
 kubectl get  secretstore.external-secrets.io
