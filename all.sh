@@ -1188,17 +1188,20 @@ function switch_kubie_ctx_ns () {
     kubie ctx -n $2 $1
 }
 function fkn () {
+  local ctxlst=$(mktemp);
+  kubectl config get-contexts -oname | grep -E ".*${2}.*" > $ctxlst
+  test $FKN_WITH_MASTERS || sed -i "/--master-/d" $ctxlst
   local ctx=
-  test $(kubectl config get-contexts -oname | grep -E ".*${2}.*" | wc -l) -gt 1 \
-    && ctx=$(kubectl config get-contexts -oname | grep -E ".*${2}.*" | fzf ) \
-    || ctx=$(kubectl config get-contexts -oname | grep -E ".*${2}.*" )
-  # local filter=${1:-"*"}
+  test $(cat $ctxlst | wc -l) -gt 1 && ctx=$(cat $ctxlst | fzf ) || ctx=$(cat $ctxlst)
   local nslist=$(kubectl --context ${ctx} get ns -oname | cut -d'/' -f2 | grep -E ".*${1}.*")
   test "$(echo $nslist | tr ' ' '\n' | wc -l)" -gt "1" && {
     switch_kubie_ctx_ns ${ctx} $(echo $nslist | tr ' ' '\n' | fzf)
   } || {
     switch_kubie_ctx_ns ${ctx} ${nslist}
   }
+}
+function fkn-with-masters () {
+  FKN_WITH_MASTERS=true fkn $1 $2 $3
 }
  ######  ##     ##  ######
 ##    ## ##     ## ##    ##
