@@ -30,10 +30,10 @@ function fkill () {  # $1 = pod name
 
 function fkc-pod-cleanup () {
   kubectl get po --chunk-size=0 -A | 
-  grep -E "Completed|Unknown" | 
+  grep -E "Completed|Unknown|Error|Terminating" | 
   while read ns po xxx; 
   do 
-    kubectl -n $ns delete po $po; 
+    kubectl -n $ns delete po $po   --grace-period=0 --force ; 
   done
 }
 
