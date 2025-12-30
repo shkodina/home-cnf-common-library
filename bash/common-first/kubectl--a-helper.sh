@@ -65,8 +65,9 @@ function fkc () {
         "rollout-deploy"      | "selector" ) fkc-$cmd ; return ;;
         "rollout-statefulset" | "selector" ) fkc-$cmd ; return ;;
 
-        "secret-data" | "selector" ) fgetsecretdata ; return ;;
-        "secret-tls"  | "selector" ) fgetsecretdata-from-tls ; return ;;
+        "secret-data"              | "selector" ) fgetsecretdata ; return ;;
+        "secret-tls"               | "selector" ) fgetsecretdata-from-tls ; return ;;
+        "tls-expires-ends-in"      | "selector" ) fkc-$cmd ; return ;;
 
         "info"        | "selector" ) fginfo ; return ;;
         "info-full"   | "selector" ) fginfo-full ; return ;;

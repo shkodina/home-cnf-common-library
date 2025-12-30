@@ -787,8 +787,9 @@ function fkc () {
         "svc-kill" | "selector" ) fkc-$cmd ; return ;;
         "rollout-deploy"      | "selector" ) fkc-$cmd ; return ;;
         "rollout-statefulset" | "selector" ) fkc-$cmd ; return ;;
-        "secret-data" | "selector" ) fgetsecretdata ; return ;;
-        "secret-tls"  | "selector" ) fgetsecretdata-from-tls ; return ;;
+        "secret-data"              | "selector" ) fgetsecretdata ; return ;;
+        "secret-tls"               | "selector" ) fgetsecretdata-from-tls ; return ;;
+        "tls-expires-ends-in"      | "selector" ) fkc-$cmd ; return ;;
         "info"        | "selector" ) fginfo ; return ;;
         "info-full"   | "selector" ) fginfo-full ; return ;;
         "token-review" | "selector" ) echo "call: fkc-token-review  <token>" ; return ;;
@@ -867,6 +868,32 @@ function fgetsecretdata-from-tls () {
   #             base64 -d > $tmp
   # openssl crl2pkcs7 -nocrl -certfile $tmp |
   #   openssl pkcs7 -print_certs -text -noout
+}
+function fkc-tls-expires-ends-in () {
+  local tsnow=$(date -u +%s)
+  local tmp=$(mktemp)
+  local tmpts=$(mktemp)
+  local tmp_tls_names=$(mktemp)
+  local max_name_length=0
+  kubectl get secrets | grep tls | cut -d' ' -f1 > $tmp_tls_names
+  max_name_length=$(cat $tmp_tls_names | while read name; do echo $name | wc -c; done | sort -d -u | tail -n 1)
+  cat $tmp_tls_names |
+  while read name;
+  do
+    kubectl get secret $name -oyaml |
+    yq '.data."tls.crt"' |
+    base64 -d |
+    while openssl x509 -noout -text 2>>/dev/null ; do echo ; done |
+    grep 'Not After :' |
+    cut -d':' -f2- |
+    while read ts; do date -d "$ts" +%s; done |
+    sort -d -u |
+    head -n 1 > $tmpts
+    local target=$(cat $tmpts | head -n 1)
+    local seconds=$(( target - tsnow ))
+    local days=$(( seconds / 86400 ))
+    printf "tls: %-${max_name_length}s expires in: %-5s days or: %s\n" "$name" "$days" "$(date -d "@$target")"
+  done
 }
 function fget-external-secrets () {
 cat << EOF
