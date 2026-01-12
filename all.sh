@@ -754,6 +754,8 @@ function fkc () {
         "node-uncordone"          | "selector" ) fkc-$cmd ; return ;;
         "node-drain"              | "selector" ) fkc-$cmd ; return ;;
         "node-shell"              | "selector" ) fkc-$cmd ; return ;;
+        "node-disable"            | "selector" ) fkc-$cmd ; return ;;
+        "node-enable"             | "selector" ) fkc-$cmd ; return ;;
         "pod-limits"     | "selector" ) fkc-$cmd ; return ;;
         "pod-kill"       | "selector" ) fkill    ; return ;;
         "pod-cleanup"    | "selector" ) fkc-$cmd ; return ;;
@@ -1384,6 +1386,40 @@ EOF
 }
 function fkc-node-shell () {
   kubectl node-shell $(kubectl get no -oname | cut -d / -f2 | fzf)
+}
+function fkc-node-enable () {
+  test -z $KUBIE_ACTIVE && echo "NO KUBIE. EXIT"
+  test -z $KUBIE_ACTIVE && return
+  local lnode=$(kubectl get no -l node-role.kubernetes.io/worker="true" | fzf | cut -d' ' -f1)
+  local lpree=$(kubectl get no -o yaml $lnode | yq -r .metadata.labels.preemptible)
+  local lycvm=$(kubectl get no -o yaml $lnode | yq -r .metadata.labels.yc-vm-name)
+  echo kubectl uncordon $lnode
+  echo kubectl label node $lnode node-oper-state=not-schedule--false --overwrite
+  kubectl uncordon $lnode
+  kubectl label node $lnode node-oper-state=not-schedule--false --overwrite
+  [ "$lpree" == "yes" ] && {
+    echo kubectl label node $lnode preemptible-cj-ignore-up="false" --overwrite
+    kubectl label node $lnode preemptible-cj-ignore-up="false" --overwrite
+  }
+  echo "yc compute instance start --name $lycvm"
+}
+function fkc-node-disable () {
+  test -z $KUBIE_ACTIVE && echo "NO KUBIE. EXIT"
+  test -z $KUBIE_ACTIVE && return
+  local lnode=$(kubectl get no -l node-role.kubernetes.io/worker="true" | fzf | cut -d' ' -f1)
+  local lpree=$(kubectl get no -o yaml $lnode | yq -r .metadata.labels.preemptible)
+  local lycvm=$(kubectl get no -o yaml $lnode | yq -r .metadata.labels.yc-vm-name)
+  echo kubectl cordon $lnode
+  echo kubectl drain --ignore-daemonsets --delete-emptydir-data $lnode
+  echo kubectl label node $lnode node-oper-state=not-schedule --overwrite
+  kubectl cordon $lnode
+  kubectl drain --ignore-daemonsets --delete-emptydir-data $lnode
+  kubectl label node $lnode node-oper-state=not-schedule --overwrite
+  [ "$lpree" == "yes" ] && {
+    echo kubectl label node $lnode preemptible-cj-ignore-up="true" --overwrite
+    kubectl label node $lnode preemptible-cj-ignore-up="true" --overwrite
+  }
+  echo "yc compute instance stop --name $lycvm"
 }
 ########  ##     ##          ########  ##     ##  ######
 ##     ## ##     ##          ##     ## ##     ## ##    ##

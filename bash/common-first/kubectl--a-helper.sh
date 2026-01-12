@@ -21,6 +21,8 @@ function fkc () {
         "node-uncordone"          | "selector" ) fkc-$cmd ; return ;;
         "node-drain"              | "selector" ) fkc-$cmd ; return ;;
         "node-shell"              | "selector" ) fkc-$cmd ; return ;;
+        "node-disable"            | "selector" ) fkc-$cmd ; return ;;
+        "node-enable"             | "selector" ) fkc-$cmd ; return ;;
 
         "pod-limits"     | "selector" ) fkc-$cmd ; return ;;
         "pod-kill"       | "selector" ) fkill    ; return ;;
