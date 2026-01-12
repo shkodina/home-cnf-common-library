@@ -1499,7 +1499,12 @@ function fkc-pvc-full-delete () {
   return 0
 }
 function fldap-search-user () {  #  $1=user.name
-  echo $1
+  ldapsearch -x \
+    -D "${LDAPSEARCH__D}" \
+    -b "${LDAPSEARCH__B}" \
+    -w "${LDAPSEARCH__W}" \
+    -H "ldap://${LDAPSEARCH__H}" \
+    -s sub "(&(objectClass=user)(sAMAccountName=$1))"
 }
 function f_log_title () {
     echo ""
