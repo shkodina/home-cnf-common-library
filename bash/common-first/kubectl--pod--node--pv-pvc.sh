@@ -143,7 +143,13 @@ function fkc-node-shell () {
   kubectl node-shell $(kubectl get no -oname | cut -d / -f2 | fzf)
 }
 
-
+#######                                    
+#       #    #   ##   #####  #      ###### 
+#       ##   #  #  #  #    # #      #      
+#####   # #  # #    # #####  #      #####  
+#       #  # # ###### #    # #      #      
+#       #   ## #    # #    # #      #      
+####### #    # #    # #####  ###### ###### 
 
 function fkc-node-enable () {
   test -z $KUBIE_ACTIVE && echo "NO KUBIE. EXIT"
@@ -167,7 +173,13 @@ function fkc-node-enable () {
   echo "yc compute instance start --name $lycvm"
 }
 
-
+######                                       
+#     # #  ####    ##   #####  #      ###### 
+#     # # #       #  #  #    # #      #      
+#     # #  ####  #    # #####  #      #####  
+#     # #      # ###### #    # #      #      
+#     # # #    # #    # #    # #      #      
+######  #  ####  #    # #####  ###### ###### 
 
 function fkc-node-disable () {
   test -z $KUBIE_ACTIVE && echo "NO KUBIE. EXIT"
