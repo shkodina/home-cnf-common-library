@@ -22,6 +22,13 @@ function fkc-pod-limits () {
   kubectl get pod --chunk-size=0 -A -o custom-columns="$ns,$pod,$container,$resource_req_mem,$resource_lim_mem,$resource_req_cpu,$resource_lim_cpu"
 }
 
+#    # # #      #      
+#   #  # #      #      
+####   # #      #      
+#  #   # #      #      
+#   #  # #      #      
+#    # # ###### ###### 
+
 function fkill () {  # $1 = pod name
         local name=$1
         [ -z $name ] && { name=$(kubectl get pods | tail -n +2 | fzf -m | f1) ;  kubectl delete pod --grace-period=0 --force $name ; } \
@@ -201,6 +208,22 @@ function fkc-node-disable () {
     echo kubectl label node $lnode preemptible-cj-ignore-up="true" --overwrite
     kubectl label node $lnode preemptible-cj-ignore-up="true" --overwrite
   }
+
+cat << EOF
+kubectl -n kube-system get ds -o name | 
+xargs kubectl -n kube-system rollout restart 
+kubectl -n monitoring get ds -o name | 
+xargs kubectl -n monitoring rollout restart 
+kubectl -n metallb-system get ds -o name | 
+xargs kubectl -n metallb-system rollout restart 
+sleep 300
+kubectl -n kube-system get po | grep Terminating | cut -d' ' -f1 | 
+xargs kubectl -n kube-system delete pod --grace-period=0 --force
+kubectl -n monitoring get po | grep Terminating | cut -d' ' -f1 | 
+xargs kubectl -n monitoring delete pod --grace-period=0 --force
+kubectl -n metallb-system get po | grep Terminating | cut -d' ' -f1 | 
+xargs kubectl -n metallb-system delete pod --grace-period=0 --force
+EOF
 
   echo "yc compute instance stop --name $lycvm"
 }
