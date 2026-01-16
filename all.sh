@@ -1831,15 +1831,17 @@ function fvault-cli-get-value-from-root () {  #  $1 path  $2 key(field)
     }
 }
 # https://raw.githubusercontent.com/shkodina/home-cnf-common-library/refs/heads/main/bash/common-first/yc.sh
-function yc-activate-profile () {
-    local profile=$(yc config profile list | cut -d ' ' -f1 | fzf)
-    yc config profile activate ${profile}
-    sed -i "/YC_TOKEN=/d" ~/.bashrc
-    export YC_TOKEN=$(yc iam create-token)
-    export YC_CLOUD_ID=$(yc config get cloud-id)
+function fyc-profile-activate ()  #  $1 = may_be_profile_name
+{
+    test -z $1 \
+        && local profile=$(yc config profile list | cut -d ' ' -f1 | fzf) \
+        || local profile=$1
+    yc config profile activate ${profile};
+    sed -i "/YC_TOKEN=/d" ~/.bashrc;
+    export YC_TOKEN=$(yc iam create-token);
+    export YC_CLOUD_ID=$(yc config get cloud-id);
     export YC_FOLDER_ID=$(yc config get folder-id)
 }
-alias fyc-profile-activate=yc-activate-profile
 function fyc-set-external-yc-token () {
     sed -i "/YC_TOKEN=/d" ~/.bashrc
     echo export YC_TOKEN=$1 | tee -a ~/.bashrc
