@@ -1957,7 +1957,8 @@ function fdocker () {
     test "$cmd" == "" && cmd=$(type $FUNCNAME | grep selector | grep -v grep | cut -d'"' -f2 | fzf)
     case $cmd in
         "list-i" | "selector" )
-            $sudo_prefix docker image list | while read n t tt; do echo $n:$t; done
+            # $sudo_prefix docker image list | while read n t tt; do echo $n:$t; done
+            $sudo_prefix docker image list --format "table {{.Repository}}:{{.Tag}}"
             return
         ;;
         "list-i-size" | "selector" )

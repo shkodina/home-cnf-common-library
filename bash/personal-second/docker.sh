@@ -25,7 +25,8 @@ function fdocker () {
 
     case $cmd in
         "list-i" | "selector" ) 
-            $sudo_prefix docker image list | while read n t tt; do echo $n:$t; done
+            # $sudo_prefix docker image list | while read n t tt; do echo $n:$t; done
+            $sudo_prefix docker image list --format "table {{.Repository}}:{{.Tag}}"
             return
         ;;
 
