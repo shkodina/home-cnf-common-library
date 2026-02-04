@@ -927,9 +927,14 @@ function fginfo () {
     kubectl get cm -oyaml ${app}-deploy-info |
     yq .data |
     grep -i -E "URL|gitlab_cnf_link|CICD_ANSIBLE_GITLAB_SVC_CNF_LINK|argocd_values" |
+    grep -v -E "DOCKER_LABEL__" |
     grep 'https://' |
     cut -d: -f2- |
     sort -u
+    # while read k s;
+    # do
+    #     printf "%-35s %s\n" "$k" "$s"
+    # done
   done
 }
 function fginfo-full () {

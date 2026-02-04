@@ -132,21 +132,25 @@ EOF
  ######  ##     ##       #### ##    ## ##        #######  
  
 function fginfo () {
-  kubectl get cm -oname -l cnf-type=info | 
-  cut -d/ -f2 | 
+  kubectl get cm -oname -l cnf-type=info |
+  cut -d/ -f2 |
   sed -e "s/-deploy-info//g" |
-  fzf -m | 
-  while read app; 
-  do 
-    kubectl get cm -oyaml ${app}-deploy-info | 
+  fzf -m |
+  while read app;
+  do
+    kubectl get cm -oyaml ${app}-deploy-info |
     yq .data |
-    grep -i -E "URL|gitlab_cnf_link|CICD_ANSIBLE_GITLAB_SVC_CNF_LINK|argocd_values" | 
-    grep 'https://' | 
-    cut -d: -f2- | 
+    grep -i -E "URL|gitlab_cnf_link|CICD_ANSIBLE_GITLAB_SVC_CNF_LINK|argocd_values" |
+    grep -v -E "DOCKER_LABEL__" |
+    grep 'https://' |
+    cut -d: -f2- |
     sort -u
+    # while read k s;
+    # do
+    #     printf "%-35s %s\n" "$k" "$s"
+    # done
   done
 }
-
 function fginfo-full () {
   kubectl get cm -oname -l cnf-type=info | 
   cut -d/ -f2 | 
